@@ -3,12 +3,15 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "Christian Dezha <dezhac6@gmail.com> (https://christiandezha.com/)",
   "license": "MIT",
   "type": "commonjs",
-  "description": "Backend REST API for e-commerce site X"
+  "description": "Backend REST API for e-commerce site X",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
 }
