@@ -1,7 +1,6 @@
 import express from "express"; // Import express module from express package
-import "dotenv/config"; // Initialize .env variables from .env file
 import cors from "cors"; // Import CORS module from CORS package
-import routes from "./routes"; // Import routes/end points
+import routes from "./routes/index.js"; // Import routes/end points
 
 const app = express(); // Create instance of an Express application
 
@@ -18,11 +17,17 @@ app.use("/products", routes.products); // prefix for 'products' routes
 app.use("/users", routes.users); // prefix for 'users' routes
 
 app.get("/", (req, res) => {
-  res.send("Home route");
-});
-
-app.listen(process.env.PORT, () => {
-  console.log(
-    `Listening on port ${process.env.PORT}! Initial set up for backend server.`
+  res.send(
+    "Welcome to the home route for the backend REST API for X fitness brand."
   );
 });
+
+export default app; // Export app without starting the server
+
+// Benefits of this approach:
+// 1. Prevents Server from Auto-Starting in Tests
+//    - Tests don't accidentally start the server when requiring the app.
+// 2. Enables Better Testing
+//    - You can import app for testing while keeping server.js for production
+// 3. Allows Clean Shutdown
+//    - You can close the server after tests to free up sources.
