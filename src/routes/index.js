@@ -1,11 +1,11 @@
-import users from "./users";
-import products from "./products";
-import payments from "./payments";
-import orders from "./orders";
-import orderItems from "./order_items";
-import categories from "./categories";
-import carts from "./carts";
-import cartItems from "./cart_items";
+import users from "./users.js";
+import products from "./products.js";
+import payments from "./payments.js";
+import orders from "./orders.js";
+import orderItems from "./order_items.js";
+import categories from "./categories.js";
+import carts from "./carts.js";
+import cartItems from "./cart_items.js";
 
 export default {
   users,
