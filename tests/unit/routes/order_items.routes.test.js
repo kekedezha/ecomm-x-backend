@@ -20,7 +20,7 @@ describe("Order-items endpoints", () => {
 
   it("POST /order-items should create a new order-item to the order-items table", async () => {
     const res = await requestWithSupertest.post("/order-items");
-    expect(res.status).toEqual(200);
+    expect(res.status).toEqual(201);
     expect(res.text).toEqual("POST HTTP method on order-items resource");
   });
 

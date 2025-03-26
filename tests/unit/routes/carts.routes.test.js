@@ -18,7 +18,7 @@ describe("Carts endpoints", () => {
 
   it("POST /carts should create a new cart to the carts table", async () => {
     const res = await requestWithSupertest.post("/carts");
-    expect(res.status).toEqual(200);
+    expect(res.status).toEqual(201);
     expect(res.text).toEqual("POST HTTP method on carts resource");
   });
 

@@ -18,7 +18,7 @@ router.get("/:productId", (req, res) => {
 
 // POST HTTP route for creating a new product to the db
 router.post("/", (req, res) => {
-  return res.send("POST HTTP method on products resource");
+  return res.status(201).send("POST HTTP method on products resource");
 });
 
 // PUT HTTP route for updating a product info

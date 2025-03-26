@@ -18,7 +18,7 @@ router.get("/:paymentId", (req, res) => {
 
 // POST HTTP route for creating a new payment to the db
 router.post("/", (req, res) => {
-  return res.send("POST HTTP method on payments resource");
+  return res.status(201).send("POST HTTP method on payments resource");
 });
 
 // PUT HTTP route for updating payment info

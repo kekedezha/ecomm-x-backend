@@ -20,7 +20,7 @@ describe("Products endpoints", () => {
 
   it("POST /products should create a new product to the products table", async () => {
     const res = await requestWithSupertest.post("/products");
-    expect(res.status).toEqual(200);
+    expect(res.status).toEqual(201);
     expect(res.text).toEqual("POST HTTP method on products resource");
   });
 

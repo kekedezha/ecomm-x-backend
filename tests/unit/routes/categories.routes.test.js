@@ -20,7 +20,7 @@ describe("Categories endpoints", () => {
 
   it("POST /categories should create a new category to the categories table", async () => {
     const res = await requestWithSupertest.post("/categories");
-    expect(res.status).toEqual(200);
+    expect(res.status).toEqual(201);
     expect(res.text).toEqual("POST HTTP method on categories resource");
   });
 

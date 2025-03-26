@@ -18,7 +18,7 @@ router.get("/:orderId", (req, res) => {
 
 // POST HTTP route for creating a new order to the db
 router.post("/", (req, res) => {
-  return res.send("POST HTTP method on orders resource");
+  return res.status(201).send("POST HTTP method on orders resource");
 });
 
 // PUT HTTP route for updating order

@@ -20,7 +20,7 @@ describe("Payments endpoints", () => {
 
   it("POST /payments should create a new payment to the payments table", async () => {
     const res = await requestWithSupertest.post("/payments");
-    expect(res.status).toEqual(200);
+    expect(res.status).toEqual(201);
     expect(res.text).toEqual("POST HTTP method on payments resource");
   });
 

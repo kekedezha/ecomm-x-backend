@@ -18,7 +18,7 @@ describe("Users endpoints", () => {
 
   it("POST /users should create a new user to the users table", async () => {
     const res = await requestWithSupertest.post("/users");
-    expect(res.status).toEqual(200);
+    expect(res.status).toEqual(201);
     expect(res.text).toEqual("POST HTTP method on users resource");
   });
 

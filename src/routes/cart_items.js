@@ -18,7 +18,7 @@ router.get("/:cartItemId", (req, res) => {
 
 // POST HTTP route for creating a new cart-item to the db
 router.post("/", (req, res) => {
-  return res.send("POST HTTP method on cart-items resource");
+  return res.status(201).send("POST HTTP method on cart-items resource");
 });
 
 // PUT HTTP route for updating a cart-items info
