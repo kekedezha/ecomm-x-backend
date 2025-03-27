@@ -38,24 +38,27 @@ export const addNewProduct = async (req, res) => {
     const categoryId = parseInt(req.body.categoryId);
 
     if (
-      id != NaN &&
-      name != undefined &&
-      description != undefined &&
-      price != NaN &&
-      stock != NaN &&
-      categoryId != NaN
+      Number.isNaN(id) ||
+      !name ||
+      !description ||
+      Number.isNaN(price) ||
+      Number.isNaN(stock) ||
+      Number.isNaN(categoryId)
     ) {
-      const result = await pool.query(
-        "INSERT INTO products (id, name, description, price, stock, category_id) VALUES ($1, $2, $3, $4, $5, $6)",
-        [id, name, description, price, stock, categoryId]
-      );
-      console.log(result);
-      res.status(201).json("Successfully created new product!");
-    } else {
-      return res.status(400).json({
-        error: "Bad Request. Missing product information. Please try again.",
-      });
+      return res
+        .status(400)
+        .json({
+          error: "Bad Request. Missing or invalid product information.",
+        });
     }
+    const result = await pool.query(
+      "INSERT INTO products (id, name, description, price, stock, category_id) VALUES ($1, $2, $3, $4, $5, $6)",
+      [id, name, description, price, stock, categoryId]
+    );
+    res.status(201).json({
+      message: "Successfully created new product!",
+      product: result.rows[0],
+    });
   } catch (error) {
     console.error("Error creating product: ", error);
     res.status(500).send({ error: "Internal Server Error" });
@@ -65,15 +68,56 @@ export const addNewProduct = async (req, res) => {
 // PUT function for admin use
 export const updateProduct = async (req, res) => {
   try {
-  } catch (error) {}
+    const productId = parseInt(req.params.productId);
+    const updates = req.body;
+
+    // Ensure there's at least one field to update
+    if (Object.keys(updates).length == 0) {
+      return res.status(400).json({ error: "No fields provided for update" });
+    }
+
+    // Create dynamic query
+    const setClause = Object.keys(updates).map(
+      (key, index) => `"${key}" = $${index + 1}`
+    );
+    const values = Object.values(updates);
+    values.push(productId);
+
+    const query = `UPDATE products SET ${setClause} WHERE id = $${values.length} RETURNING *`;
+
+    const { rows } = await pool.query(query, values);
+
+    if (rows.length == 0) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    res.status(200).json(rows[0]);
+  } catch (error) {
+    console.error("Error deleting specified product: ", error);
+    res.status(500).send({ error: "Internal Server Error" });
+  }
 };
 
 // DELETE function for admin use
 export const deleteProduct = async (req, res) => {
   try {
     const productId = parseInt(req.params.productId);
-    const result = await pool.query("DELETE FROM products WHERE id = $1", [
-      productId,
-    ]);
-  } catch (error) {}
+    if (Number.isNaN(productId)) {
+      return res.status(400).json({ error: "Invalid product ID." });
+    }
+    const result = await pool.query(
+      "DELETE FROM products WHERE id = $1 RETURNING *",
+      [productId]
+    );
+    if (result.rowCount == 0) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+    return res.status(200).json({
+      message: "Successfully deleted product.",
+      deletedProduct: result.rows[0],
+    });
+  } catch (error) {
+    console.error("Error deleting specified product: ", error);
+    res.status(500).send({ error: "Internal Server Error" });
+  }
 };
