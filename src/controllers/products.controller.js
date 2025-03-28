@@ -20,7 +20,7 @@ export const getProductById = async (req, res) => {
     if (result.rows.length == 0) {
       return res.status(404).json({ error: "Product not found" });
     }
-    res.json(result.rows);
+    res.json(result.rows[0]);
   } catch (error) {
     console.error("Error fetching specified product: ", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -45,11 +45,9 @@ export const addNewProduct = async (req, res) => {
       Number.isNaN(stock) ||
       Number.isNaN(categoryId)
     ) {
-      return res
-        .status(400)
-        .json({
-          error: "Bad Request. Missing or invalid product information.",
-        });
+      return res.status(400).json({
+        error: "Bad Request. Missing or invalid product information.",
+      });
     }
     const result = await pool.query(
       "INSERT INTO products (id, name, description, price, stock, category_id) VALUES ($1, $2, $3, $4, $5, $6)",
