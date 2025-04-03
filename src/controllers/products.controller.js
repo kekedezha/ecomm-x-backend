@@ -50,7 +50,7 @@ export const addNewProduct = async (req, res) => {
       });
     }
     const result = await pool.query(
-      "INSERT INTO products (id, name, description, price, stock, category_id) VALUES ($1, $2, $3, $4, $5, $6)",
+      "INSERT INTO products (id, name, description, price, stock, category_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
       [id, name, description, price, stock, categoryId]
     );
     res.status(201).json({
