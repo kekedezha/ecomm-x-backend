@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --exec babel-node src/server.js",
-    "test": "cross-env NODE_ENV=test jest --testTimeout=5000"
+    "test": "(pg_isready || brew services start postgresql) && cross-env NODE_ENV=test jest --testTimeout=5000 --runInBand && brew services stop postgresql"
   },
   "keywords": [],
   "author": "Christian Dezha <dezhac6@gmail.com> (https://christiandezha.com/)",
