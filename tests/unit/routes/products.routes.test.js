@@ -37,13 +37,49 @@ describe("Products endpoints", () => {
         "Long, thin type of bread of French origin."
       );
     });
-  });
-  // it("POST /products should create a new product to the products table", async () => {
-  //   const res = await requestWithSupertest.post("/products");
-  //   expect(res.status).toEqual(201);
-  //   expect(res.text).toEqual("POST HTTP method on products resource");
-  // });
 
+    it("GET /products/999 should fail to retrieve a product with id of 999", async () => {
+      const res = await requestWithSupertest.get("/products/999");
+      expect(res.status).toEqual(404);
+      expect(res.type).toEqual(expect.stringContaining("json"));
+      expect(res.body.error).toEqual("Product not found");
+    });
+  });
+
+  describe("POST HTTP method to add a new product to the database", () => {
+    it("POST /products should add a new product with id of 99, which will be a concha", async () => {
+      const res = await requestWithSupertest.post("/products").send({
+        id: "99",
+        name: "Concha",
+        description: "Mexican sweet bread. This is a simple test. DELETE LATER",
+        price: "4.99",
+        stock: "25",
+        categoryId: "2",
+      });
+      expect(res.status).toEqual(201);
+      expect(res.type).toEqual(expect.stringContaining("json"));
+      expect(res.body.product).toEqual(
+        expect.objectContaining({
+          id: 99,
+          name: "Concha",
+          description: expect.any(String),
+          price: expect.any(String),
+          stock: expect.any(Number),
+          category_id: expect.any(Number),
+          created_at: expect.any(String),
+        })
+      );
+    });
+  });
+
+  describe("DELETE HTTP method to delete a specified product from the database", () => {
+    it("DELETE /products/99 should delete the product with id of 99 from the database", async () => {
+      const res = await requestWithSupertest.delete("/products/99");
+      expect(res.status).toEqual(200);
+      expect(res.type).toEqual(expect.stringContaining("json"));
+      expect(res.body.message).toEqual("Successfully deleted product.");
+    });
+  });
   // it("PUT /products/:productId should update product with specified productId", async () => {
   //   const res = await requestWithSupertest.put("/products/:2");
   //   expect(res.status).toEqual(200);
