@@ -47,7 +47,7 @@ describe("Products endpoints", () => {
   });
 
   describe("POST HTTP method to add a new product to the database", () => {
-    it("POST /products should add a new product with id of 99, which will be a concha", async () => {
+    it("POST /products should add a new product with id of 99, a concha", async () => {
       const res = await requestWithSupertest.post("/products").send({
         id: "99",
         name: "Concha",
@@ -70,6 +70,41 @@ describe("Products endpoints", () => {
         })
       );
     });
+
+    it("POST /products should fail to create a new product with insufficient/missing information", async () => {
+      const res = await requestWithSupertest.post("/products").send({
+        id: "100",
+        description: "Mexican sweet bread. This is a simple test. DELETE LATER",
+        price: "4.99",
+        stock: "25",
+        categoryId: "2",
+      });
+      expect(res.status).toEqual(400);
+      expect(res.type).toEqual(expect.stringContaining("json"));
+      expect(res.body.error).toEqual(
+        "Bad Request. Missing or invalid product information."
+      );
+    });
+  });
+
+  describe("PUT HTTP method to update/modify a product from the database", () => {
+    it("PUT /products/99 should update the product with the specified id of 99. It should update the name be Oreja", async () => {
+      const res = await requestWithSupertest.put("/products/99").send({
+        name: "Oreja",
+      });
+      expect(res.status).toEqual(200);
+      expect(res.type).toEqual(expect.stringContaining("json"));
+      expect(res.body.id).toEqual(99);
+      expect(res.body.name).toEqual("Oreja");
+    });
+    it("PUT /products/999 should fail to update the product because it does not exist in the database", async () => {
+      const res = await requestWithSupertest.put("/products/999").send({
+        name: "Ojo de wey",
+      });
+      expect(res.status).toEqual(404);
+      expect(res.type).toEqual(expect.stringContaining("json"));
+      expect(res.body.error).toEqual("Product not found");
+    });
   });
 
   describe("DELETE HTTP method to delete a specified product from the database", () => {
@@ -79,22 +114,14 @@ describe("Products endpoints", () => {
       expect(res.type).toEqual(expect.stringContaining("json"));
       expect(res.body.message).toEqual("Successfully deleted product.");
     });
-  });
-  // it("PUT /products/:productId should update product with specified productId", async () => {
-  //   const res = await requestWithSupertest.put("/products/:2");
-  //   expect(res.status).toEqual(200);
-  //   expect(res.text).toEqual(
-  //     "PUT HTTP method on products resource for products/:2"
-  //   );
-  // });
 
-  // it("DELETE /products/:productId should delete product with specified productId", async () => {
-  //   const res = await requestWithSupertest.delete("/products/:3");
-  //   expect(res.status).toEqual(200);
-  //   expect(res.text).toEqual(
-  //     "DELETE HTTP method on products resource for products/:3"
-  //   );
-  // });
+    it("DELETE /products/999 should fail to delete a product not found in the database", async () => {
+      const res = await requestWithSupertest.delete("/products/999");
+      expect(res.status).toEqual(404);
+      expect(res.type).toEqual(expect.stringContaining("json"));
+      expect(res.body.error).toEqual("Product not found");
+    });
+  });
 });
 
 // Ensure db connection pool closes after all the tests to ensure proper teardown and prevent data leaks
