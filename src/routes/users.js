@@ -1,38 +1,29 @@
 // Import 'Router' class from the express module to create modular route handlers
 import { Router } from "express";
+import {
+  getAllUsers,
+  getUserById,
+  addNewUser,
+  updateUser,
+  deleteUser,
+} from "../controllers/users.controller";
 
 // Initialize a router instance to use with 'users' routes
 const router = Router();
 
 // GET HTTP route for retrieving all of the users from the db
-router.get("/", (req, res) => {
-  return res.send("General GET HTTP method on users resource");
-});
+router.get("/", getAllUsers);
 
 // GET HTTP route for getting a single user from the db
-router.get("/:userId", (req, res) => {
-  return res.send(
-    `GET HTTP method on user resource for users/${req.params.userId}`
-  );
-});
+router.get("/:userId", getUserById);
 
 // POST HTTP route for creating a new user to the db
-router.post("/", (req, res) => {
-  return res.status(201).send("POST HTTP method on users resource");
-});
+router.post("/", addNewUser);
 
 // PUT HTTP route for updating a users info
-router.put("/:userId", (req, res) => {
-  return res.send(
-    `PUT HTTP method on users resource for users/${req.params.userId}`
-  );
-});
+router.put("/:userId", updateUser);
 
 // DELETE HTTP route for deleting a user
-router.delete("/:userId", (req, res) => {
-  return res.send(
-    `DELETE HTTP method on users resource for users/${req.params.userId}`
-  );
-});
+router.delete("/:userId", deleteUser);
 
 export default router;
