@@ -91,7 +91,7 @@ export const updateProduct = async (req, res) => {
 
     res.status(200).json(rows[0]);
   } catch (error) {
-    console.error("Error deleting specified product: ", error);
+    console.error("Error updating specified product: ", error);
     res.status(500).send({ error: "Internal Server Error" });
   }
 };
