@@ -2,10 +2,12 @@
 import { parse } from "dotenv";
 import pool from "../db";
 
-// GET function - retrieve all users
+// GET function - retrieve all users ADMIN ONLY
 export const getAllUsers = async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM users");
+    const result = await pool.query(
+      "SELECT id, username, email, first_name, last_name, address, created_at FROM users"
+    );
     res.json(result.rows);
   } catch (error) {
     console.error("Error fetching users: ", error);
@@ -56,7 +58,7 @@ export const addNewUser = async (req, res) => {
         .json({ error: "Bad Request. Missing or invalid user information." });
     }
     const result = await pool.query(
-      "INSERT INTO users (id, username, email, password, first_name, last_name, address) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+      "INSERT INTO users (id, username, email, password, first_name, last_name, address) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, username, first_name",
       [userId, username, email, password, firstName, lastName, address]
     );
     res.status(201).json({
@@ -93,7 +95,7 @@ export const updateUser = async (req, res) => {
     if (rows.length == 0) {
       return res.status(404).json({ error: "User not found." });
     }
-
+    console.log(rows[0]);
     res.status(200).json(rows[0]);
   } catch (error) {
     console.log("Error updating specified user: ", error);
