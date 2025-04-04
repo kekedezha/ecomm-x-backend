@@ -7,7 +7,7 @@ export const getAllProducts = async (req, res) => {
     res.json(result.rows);
   } catch (error) {
     console.error("Error fetching products: ", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Error." });
   }
 };
 
@@ -18,12 +18,12 @@ export const getProductById = async (req, res) => {
       productId,
     ]);
     if (result.rows.length == 0) {
-      return res.status(404).json({ error: "Product not found" });
+      return res.status(404).json({ error: "Product not found." });
     }
     res.json(result.rows[0]);
   } catch (error) {
     console.error("Error fetching specified product: ", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Error." });
   }
 };
 
@@ -59,7 +59,7 @@ export const addNewProduct = async (req, res) => {
     });
   } catch (error) {
     console.error("Error creating product: ", error);
-    res.status(500).send({ error: "Internal Server Error" });
+    res.status(500).send({ error: "Internal Server Error." });
   }
 };
 
@@ -67,11 +67,14 @@ export const addNewProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
   try {
     const productId = parseInt(req.params.productId);
-    const updates = req.body;
+    if (Number.isNaN(userId)) {
+      return res.status(400).json({ error: "Invalid user ID." });
+    }
 
+    const updates = req.body;
     // Ensure there's at least one field to update
     if (Object.keys(updates).length == 0) {
-      return res.status(400).json({ error: "No fields provided for update" });
+      return res.status(400).json({ error: "No fields provided for update." });
     }
 
     // Create dynamic query
@@ -86,13 +89,13 @@ export const updateProduct = async (req, res) => {
     const { rows } = await pool.query(query, values);
 
     if (rows.length == 0) {
-      return res.status(404).json({ error: "Product not found" });
+      return res.status(404).json({ error: "Product not found." });
     }
 
     res.status(200).json(rows[0]);
   } catch (error) {
     console.error("Error updating specified product: ", error);
-    res.status(500).send({ error: "Internal Server Error" });
+    res.status(500).send({ error: "Internal Server Error." });
   }
 };
 
@@ -108,7 +111,7 @@ export const deleteProduct = async (req, res) => {
       [productId]
     );
     if (result.rowCount == 0) {
-      return res.status(404).json({ error: "Product not found" });
+      return res.status(404).json({ error: "Product not found." });
     }
     return res.status(200).json({
       message: "Successfully deleted product.",
@@ -116,6 +119,6 @@ export const deleteProduct = async (req, res) => {
     });
   } catch (error) {
     console.error("Error deleting specified product: ", error);
-    res.status(500).send({ error: "Internal Server Error" });
+    res.status(500).send({ error: "Internal Server Error." });
   }
 };
