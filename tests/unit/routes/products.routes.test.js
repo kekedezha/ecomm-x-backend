@@ -42,7 +42,7 @@ describe("Products endpoints", () => {
       const res = await requestWithSupertest.get("/products/999");
       expect(res.status).toEqual(404);
       expect(res.type).toEqual(expect.stringContaining("json"));
-      expect(res.body.error).toEqual("Product not found");
+      expect(res.body.error).toEqual("Product not found.");
     });
   });
 
@@ -103,7 +103,22 @@ describe("Products endpoints", () => {
       });
       expect(res.status).toEqual(404);
       expect(res.type).toEqual(expect.stringContaining("json"));
-      expect(res.body.error).toEqual("Product not found");
+      expect(res.body.error).toEqual("Product not found.");
+    });
+    it("PUT /products/test should fail to update because of invalid path/productId", async () => {
+      const res = await requestWithSupertest.put("/products/test").send({
+        name: "Puerco",
+      });
+      expect(res.status).toEqual(400);
+      expect(res.type).toEqual(expect.stringContaining("json"));
+      expect(res.body.error).toEqual("Invalid product ID.");
+    });
+
+    it("PUT /products/99 should fail to update with no information sent over with the request", async () => {
+      const res = await requestWithSupertest.put("/products/99");
+      expect(res.status).toEqual(400);
+      expect(res.type).toEqual(expect.stringContaining("json"));
+      expect(res.body.error).toEqual("No fields provided for update.");
     });
   });
 
@@ -119,7 +134,14 @@ describe("Products endpoints", () => {
       const res = await requestWithSupertest.delete("/products/999");
       expect(res.status).toEqual(404);
       expect(res.type).toEqual(expect.stringContaining("json"));
-      expect(res.body.error).toEqual("Product not found");
+      expect(res.body.error).toEqual("Product not found.");
+    });
+
+    it("PUT /products/test should fail to delete a product with an invalid path/productId", async () => {
+      const res = await requestWithSupertest.put("/products/test");
+      expect(res.status).toEqual(400);
+      expect(res.type).toEqual(expect.stringContaining("json"));
+      expect(res.body.error).toEqual("Invalid product ID.");
     });
   });
 });

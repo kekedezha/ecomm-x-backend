@@ -67,8 +67,8 @@ export const addNewProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
   try {
     const productId = parseInt(req.params.productId);
-    if (Number.isNaN(userId)) {
-      return res.status(400).json({ error: "Invalid user ID." });
+    if (Number.isNaN(productId)) {
+      return res.status(400).json({ error: "Invalid product ID." });
     }
 
     const updates = req.body;
