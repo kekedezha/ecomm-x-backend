@@ -35,7 +35,7 @@ export const getUserById = async (req, res) => {
 // POST function - add new user to db
 export const addNewUser = async (req, res) => {
   try {
-    const userId = parseInt(req.body.userId);
+    const userId = parseInt(req.body.id);
     const username = req.body.username;
     const email = req.body.email;
     const password = req.body.password;
@@ -84,7 +84,7 @@ export const updateUser = async (req, res) => {
     }
 
     const middleQuery = Object.keys(updates).map(
-      (key, index) => `"${key}": $${index + 1}}`
+      (key, index) => `"${key}" = $${index + 1}`
     );
     const values = Object.values(updates);
     values.push(userId);
@@ -118,7 +118,7 @@ export const deleteUser = async (req, res) => {
       return res.status(404).json({ error: "User not found." });
     }
     res.status(200).json({
-      message: "Successfully delete product.",
+      message: "Successfully deleted product.",
       deletedUser: result.rows[0],
     });
   } catch (error) {

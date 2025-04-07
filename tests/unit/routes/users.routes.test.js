@@ -46,7 +46,7 @@ describe("Users endpoints", () => {
 
   describe("POST HTTP method to add a new user to the database", () => {
     it("POST /users should add a new user with id of 99, Luffy", async () => {
-      const res = await requestWithSupertest.post("/products").send({
+      const res = await requestWithSupertest.post("/users").send({
         id: "99",
         username: "kopMonkeyDLuffy",
         email: "dluffy@gmail.com",
@@ -57,7 +57,7 @@ describe("Users endpoints", () => {
       });
       expect(res.status).toEqual(201);
       expect(res.type).toEqual(expect.stringContaining("json"));
-      expect(res.body.product).toEqual(
+      expect(res.body.user).toEqual(
         expect.objectContaining({
           id: 99,
           username: "kopMonkeyDLuffy",
@@ -66,8 +66,8 @@ describe("Users endpoints", () => {
       );
     });
 
-    it("POST /products should fail to create a new product with insufficient/missing information", async () => {
-      const res = await requestWithSupertest.post("/products").send({
+    it("POST /users should fail to create a new product with insufficient/missing information", async () => {
+      const res = await requestWithSupertest.post("/users").send({
         id: "100",
         firstName: "Ace",
         lastName: "Portagas",
@@ -92,7 +92,7 @@ describe("Users endpoints", () => {
     });
     it("PUT /users/999 should fail to update the user because it does not exist in the database", async () => {
       const res = await requestWithSupertest.put("/users/999").send({
-        name: "Luffy-chan",
+        username: "Luffy-chan",
       });
       expect(res.status).toEqual(404);
       expect(res.type).toEqual(expect.stringContaining("json"));
@@ -100,7 +100,7 @@ describe("Users endpoints", () => {
     });
     it("PUT /users/test should fail to update because of invalid path/userId", async () => {
       const res = await requestWithSupertest.put("/users/test").send({
-        name: "Mugi-chan",
+        username: "Mugi-chan",
       });
       expect(res.status).toEqual(400);
       expect(res.type).toEqual(expect.stringContaining("json"));
