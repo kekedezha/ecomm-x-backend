@@ -6,8 +6,8 @@ const requestWithSupertest = supertest(app);
 
 describe("Users endpoints", () => {
   describe("GET HTTP method to retrieve all users", () => {
-    it("GET /users should show all users from db", async () => {
-      const res = await requestWithSupertest.get("/users");
+    it("GET /users/admin should show all users from db", async () => {
+      const res = await requestWithSupertest.get("/users/admin");
       expect(res.status).toEqual(200);
       expect(res.type).toEqual(expect.stringContaining("json"));
       expect(res.body).toEqual(
@@ -44,9 +44,9 @@ describe("Users endpoints", () => {
     });
   });
 
-  describe("POST HTTP method to add a new user to the database", () => {
-    it("POST /users should add a new user with id of 99, Luffy", async () => {
-      const res = await requestWithSupertest.post("/users").send({
+  describe("POST HTTP method to register a new user to the database", () => {
+    it("POST /users/register should add a new user with id of 99, Luffy", async () => {
+      const res = await requestWithSupertest.post("/users/register").send({
         id: "99",
         username: "kopMonkeyDLuffy",
         email: "dluffy@gmail.com",
@@ -66,8 +66,8 @@ describe("Users endpoints", () => {
       );
     });
 
-    it("POST /users should fail to create a new product with insufficient/missing information", async () => {
-      const res = await requestWithSupertest.post("/users").send({
+    it("POST /users/register should fail to create a new product with insufficient/missing information", async () => {
+      const res = await requestWithSupertest.post("/users/register").send({
         id: "100",
         firstName: "Ace",
         lastName: "Portagas",
