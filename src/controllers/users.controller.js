@@ -1,13 +1,10 @@
 // Import 'Router class from the express module to create modular route handlers
-import { parse } from "dotenv";
 import pool from "../db";
-
+import { hashPassword, comparePassword } from "../helpers/users.helper";
 // GET function - retrieve all users ADMIN ONLY
 export const getAllUsers = async (req, res) => {
   try {
-    const result = await pool.query(
-      "SELECT id, username, email, first_name, last_name, address, created_at FROM users"
-    );
+    const result = await pool.query("SELECT * FROM users");
     res.json(result.rows);
   } catch (error) {
     console.error("Error fetching users: ", error);
@@ -32,8 +29,8 @@ export const getUserById = async (req, res) => {
   }
 };
 
-// POST function - add new user to db
-export const addNewUser = async (req, res) => {
+// POST function - create a new user
+export const registerNewUser = async (req, res) => {
   try {
     const userId = parseInt(req.body.id);
     const username = req.body.username;
@@ -57,20 +54,64 @@ export const addNewUser = async (req, res) => {
         .status(400)
         .json({ error: "Bad Request. Missing or invalid user information." });
     }
+
+    const hash = await hashPassword(password);
+
     const result = await pool.query(
       "INSERT INTO users (id, username, email, password, first_name, last_name, address) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, username, first_name",
-      [userId, username, email, password, firstName, lastName, address]
+      [userId, username, email, hash, firstName, lastName, address]
     );
     res.status(201).json({
       message: "Successfully created new user!",
       user: result.rows[0],
     });
   } catch (error) {
-    console.log("Error updating user: ", error);
+    console.log("Error creating user: ", error);
     res.status(500).json({ error: "Internal Server Error." });
   }
 };
 
+// POST function - authenticate a user and return token
+export const loginUser = async (req, res) => {
+  try {
+    // get username or email from request
+    let user;
+    let result;
+    if (req.body.username) {
+      user = req.body.username;
+      result = await pool.query(
+        "SELECT password FROM users WHERE username = $1",
+        [user]
+      );
+    } else {
+      user = req.body.email;
+      result = await pool.query("SELECT password FROM users WHERE email = $1", [
+        user,
+      ]);
+    }
+    if (result.rows.length == 0) {
+      return res
+        .status(404)
+        .json({ error: "Username or email was not found." });
+    }
+
+    const hashedPassword = result.rows[0].password;
+    const inputPassword = req.body.password;
+
+    if (await comparePassword(inputPassword, hashedPassword)) {
+      res.status(200).json({ message: "Successfully logged in!" });
+      console.log("Login successful");
+    } else {
+      res
+        .status(401)
+        .json({ message: "Incorrect password. Please try again." });
+      console.log(`Unsuccessful login by ${user}`);
+    }
+  } catch (error) {
+    console.log("Error logging in: ", error);
+    res.status(500).json({ error: "Internal Server Error. " });
+  }
+};
 // PUT function - update user by specified id
 export const updateUser = async (req, res) => {
   try {
