@@ -5,6 +5,7 @@ import pool from "../../../src/db";
 const requestWithSupertest = supertest(app);
 
 describe("Products endpoints", () => {
+  let productId;
   describe("GET HTTP method to retrieve all products", () => {
     it("GET /products should show all products from db", async () => {
       const res = await requestWithSupertest.get("/products");
@@ -47,20 +48,20 @@ describe("Products endpoints", () => {
   });
 
   describe("POST HTTP method to add a new product to the database", () => {
-    it("POST /products should add a new product with id of 99, a concha", async () => {
+    it("POST /products should add a new product, a concha", async () => {
       const res = await requestWithSupertest.post("/products").send({
-        id: "99",
         name: "Concha",
         description: "Mexican sweet bread. This is a simple test. DELETE LATER",
         price: "4.99",
         stock: "25",
         categoryId: "2",
       });
+      productId = parseInt(res.body.product.id, 10);
       expect(res.status).toEqual(201);
       expect(res.type).toEqual(expect.stringContaining("json"));
       expect(res.body.product).toEqual(
         expect.objectContaining({
-          id: 99,
+          id: expect.any(Number),
           name: "Concha",
           description: expect.any(String),
           price: expect.any(String),
@@ -73,7 +74,6 @@ describe("Products endpoints", () => {
 
     it("POST /products should fail to create a new product with insufficient/missing information", async () => {
       const res = await requestWithSupertest.post("/products").send({
-        id: "100",
         description: "Mexican sweet bread. This is a simple test. DELETE LATER",
         price: "4.99",
         stock: "25",
@@ -88,13 +88,15 @@ describe("Products endpoints", () => {
   });
 
   describe("PUT HTTP method to update/modify a product from the database", () => {
-    it("PUT /products/99 should update the product with the specified id of 99. It should update the name be Oreja", async () => {
-      const res = await requestWithSupertest.put("/products/99").send({
-        name: "Oreja",
-      });
+    it("PUT /products/xx should update the product created in the POST request to /products and update the name be Oreja", async () => {
+      const res = await requestWithSupertest
+        .put(`/products/${productId}`)
+        .send({
+          name: "Oreja",
+        });
       expect(res.status).toEqual(200);
       expect(res.type).toEqual(expect.stringContaining("json"));
-      expect(res.body.id).toEqual(99);
+      expect(res.body.id).toEqual(productId);
       expect(res.body.name).toEqual("Oreja");
     });
     it("PUT /products/999 should fail to update the product because it does not exist in the database", async () => {
@@ -114,8 +116,8 @@ describe("Products endpoints", () => {
       expect(res.body.error).toEqual("Invalid product ID.");
     });
 
-    it("PUT /products/99 should fail to update with no information sent over with the request", async () => {
-      const res = await requestWithSupertest.put("/products/99");
+    it("PUT /products/xx should fail to update with no information sent over with the request", async () => {
+      const res = await requestWithSupertest.put(`/products/${productId}`);
       expect(res.status).toEqual(400);
       expect(res.type).toEqual(expect.stringContaining("json"));
       expect(res.body.error).toEqual("No fields provided for update.");
@@ -123,8 +125,8 @@ describe("Products endpoints", () => {
   });
 
   describe("DELETE HTTP method to delete a specified product from the database", () => {
-    it("DELETE /products/99 should delete the product with id of 99 from the database", async () => {
-      const res = await requestWithSupertest.delete("/products/99");
+    it("DELETE /products/xx should delete the product created by the POST request sent to the /products path from the database", async () => {
+      const res = await requestWithSupertest.delete(`/products/${productId}`);
       expect(res.status).toEqual(200);
       expect(res.type).toEqual(expect.stringContaining("json"));
       expect(res.body.message).toEqual("Successfully deleted product.");

@@ -30,7 +30,6 @@ export const getProductById = async (req, res) => {
 // POST function for admin use
 export const addNewProduct = async (req, res) => {
   try {
-    const id = parseInt(req.body.id);
     const name = req.body.name;
     const description = req.body.description;
     const price = parseFloat(req.body.price);
@@ -38,7 +37,6 @@ export const addNewProduct = async (req, res) => {
     const categoryId = parseInt(req.body.categoryId);
 
     if (
-      Number.isNaN(id) ||
       !name ||
       !description ||
       Number.isNaN(price) ||
@@ -50,8 +48,8 @@ export const addNewProduct = async (req, res) => {
       });
     }
     const result = await pool.query(
-      "INSERT INTO products (id, name, description, price, stock, category_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-      [id, name, description, price, stock, categoryId]
+      "INSERT INTO products (name, description, price, stock, category_id) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      [name, description, price, stock, categoryId]
     );
     res.status(201).json({
       message: "Successfully created new product!",

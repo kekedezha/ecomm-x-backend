@@ -57,7 +57,6 @@ describe("Users endpoints", () => {
         address: "Somewhere in the New World",
       });
       userId = parseInt(res.body.user.id, 10);
-      console.log(userId);
       expect(res.status).toEqual(201);
       expect(res.type).toEqual(expect.stringContaining("json"));
       expect(res.body.user).toEqual(

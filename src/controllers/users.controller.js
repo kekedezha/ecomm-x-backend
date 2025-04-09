@@ -129,7 +129,6 @@ export const updateUser = async (req, res) => {
     if (rows.length == 0) {
       return res.status(404).json({ error: "User not found." });
     }
-    console.log(rows[0]);
     res.status(200).json(rows[0]);
   } catch (error) {
     console.log("Error updating specified user: ", error);
