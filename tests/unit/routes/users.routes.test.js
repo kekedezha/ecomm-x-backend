@@ -67,6 +67,20 @@ describe("Users endpoints", () => {
       );
     });
 
+    it("POST /users/register should not allow a user to be created with a username and/or email already in the database", async () => {
+      const res = await requestWithSupertest.post("/users/register").send({
+        username: "kekedehza",
+        email: "dezha6@hotmail.com",
+        password: "ilovemeat",
+        firstName: "Chris",
+        lastName: "Monkey",
+        address: "Somewhere in the New World",
+      });
+      expect(res.status).toEqual(409);
+      expect(res.type).toEqual(expect.stringContaining("json"));
+      expect(res.body.error).toEqual("Username or email already exists.");
+    });
+
     it("POST /users/register should fail to create a new product with insufficient/missing information", async () => {
       const res = await requestWithSupertest.post("/users/register").send({
         firstName: "Ace",

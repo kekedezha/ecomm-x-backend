@@ -58,6 +58,11 @@ export const registerNewUser = async (req, res) => {
       user: result.rows[0],
     });
   } catch (error) {
+    if (error.code == "23505") {
+      return res
+        .status(409)
+        .json({ error: "Username or email already exists." });
+    }
     console.log("Error creating user: ", error);
     res.status(500).json({ error: "Internal Server Error." });
   }
