@@ -5,6 +5,8 @@ import pool from "../../../src/db";
 const requestWithSupertest = supertest(app);
 
 describe("Users endpoints", () => {
+  let userId;
+
   describe("GET HTTP method to retrieve all users", () => {
     it("GET /users/admin should show all users from db", async () => {
       const res = await requestWithSupertest.get("/users/admin");
@@ -45,9 +47,8 @@ describe("Users endpoints", () => {
   });
 
   describe("POST HTTP method to register a new user to the database", () => {
-    it("POST /users/register should add a new user with id of 99, Luffy", async () => {
+    it("POST /users/register should add a new user, Luffy", async () => {
       const res = await requestWithSupertest.post("/users/register").send({
-        id: "99",
         username: "kopMonkeyDLuffy",
         email: "dluffy@gmail.com",
         password: "ilovemeat",
@@ -55,11 +56,12 @@ describe("Users endpoints", () => {
         lastName: "Monkey",
         address: "Somewhere in the New World",
       });
+      userId = parseInt(res.body.user.id, 10);
+      console.log(userId);
       expect(res.status).toEqual(201);
       expect(res.type).toEqual(expect.stringContaining("json"));
       expect(res.body.user).toEqual(
         expect.objectContaining({
-          id: 99,
           username: "kopMonkeyDLuffy",
           first_name: "Luffy",
         })
@@ -68,7 +70,6 @@ describe("Users endpoints", () => {
 
     it("POST /users/register should fail to create a new product with insufficient/missing information", async () => {
       const res = await requestWithSupertest.post("/users/register").send({
-        id: "100",
         firstName: "Ace",
         lastName: "Portagas",
       });
@@ -81,13 +82,13 @@ describe("Users endpoints", () => {
   });
 
   describe("PUT HTTP method to update/modify a user from the database", () => {
-    it("PUT /users/99 should update the user with the specified id of 99. It should update the name be Nika", async () => {
-      const res = await requestWithSupertest.put("/users/99").send({
+    it(`PUT /users/xx should update the user created in the POST request to /users/register path and update the name be Nika`, async () => {
+      const res = await requestWithSupertest.put(`/users/${userId}`).send({
         username: "Nika",
       });
       expect(res.status).toEqual(200);
       expect(res.type).toEqual(expect.stringContaining("json"));
-      expect(res.body.id).toEqual(99);
+      expect(res.body.id).toEqual(userId);
       expect(res.body.username).toEqual("Nika");
     });
     it("PUT /users/999 should fail to update the user because it does not exist in the database", async () => {
@@ -107,8 +108,8 @@ describe("Users endpoints", () => {
       expect(res.body.error).toEqual("Invalid user ID.");
     });
 
-    it("PUT /users/99 should fail to update with no information sent over with the request", async () => {
-      const res = await requestWithSupertest.put("/users/99");
+    it(`PUT /users/xx should fail to update with no information sent over with the request`, async () => {
+      const res = await requestWithSupertest.put(`/users/${userId}`);
       expect(res.status).toEqual(400);
       expect(res.type).toEqual(expect.stringContaining("json"));
       expect(res.body.error).toEqual("No fields provided for update.");
@@ -116,8 +117,8 @@ describe("Users endpoints", () => {
   });
 
   describe("DELETE HTTP method to delete a specified user from the database", () => {
-    it("DELETE /users/99 should delete the user with id of 99 from the database", async () => {
-      const res = await requestWithSupertest.delete("/users/99");
+    it(`DELETE /users/xx should delete the user created in the POST request to the path /users/register from the database`, async () => {
+      const res = await requestWithSupertest.delete(`/users/${userId}`);
       expect(res.status).toEqual(200);
       expect(res.type).toEqual(expect.stringContaining("json"));
       expect(res.body.message).toEqual("Successfully deleted product.");

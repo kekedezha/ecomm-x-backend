@@ -32,7 +32,6 @@ export const getUserById = async (req, res) => {
 // POST function - create a new user
 export const registerNewUser = async (req, res) => {
   try {
-    const userId = parseInt(req.body.id);
     const username = req.body.username;
     const email = req.body.email;
     const password = req.body.password;
@@ -42,14 +41,7 @@ export const registerNewUser = async (req, res) => {
     if (req.body.address) {
       address = req.body.address;
     }
-    if (
-      Number.isNaN(userId) ||
-      !username ||
-      !email ||
-      !password ||
-      !firstName ||
-      !lastName
-    ) {
+    if (!username || !email || !password || !firstName || !lastName) {
       return res
         .status(400)
         .json({ error: "Bad Request. Missing or invalid user information." });
@@ -58,8 +50,8 @@ export const registerNewUser = async (req, res) => {
     const hash = await hashPassword(password);
 
     const result = await pool.query(
-      "INSERT INTO users (id, username, email, password, first_name, last_name, address) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, username, first_name",
-      [userId, username, email, hash, firstName, lastName, address]
+      "INSERT INTO users (username, email, password, first_name, last_name, address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, username, first_name",
+      [username, email, hash, firstName, lastName, address]
     );
     res.status(201).json({
       message: "Successfully created new user!",
@@ -112,6 +104,7 @@ export const loginUser = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error. " });
   }
 };
+
 // PUT function - update user by specified id
 export const updateUser = async (req, res) => {
   try {
