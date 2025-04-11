@@ -1,6 +1,11 @@
 // Import 'Router class from the express module to create modular route handlers
 import pool from "../db";
-import { hashPassword, comparePassword } from "../helpers/users.helper";
+import {
+  hashPassword,
+  comparePassword,
+  generateJWT,
+} from "../helpers/users.helper";
+
 // GET function - retrieve all users ADMIN ONLY
 export const getAllUsers = async (req, res) => {
   try {
@@ -82,9 +87,10 @@ export const loginUser = async (req, res) => {
       );
     } else {
       user = req.body.email;
-      result = await pool.query("SELECT password FROM users WHERE email = $1", [
-        user,
-      ]);
+      result = await pool.query(
+        "SELECT id, username, email, password FROM users WHERE email = $1",
+        [user]
+      );
     }
     if (result.rows.length == 0) {
       return res
@@ -92,12 +98,14 @@ export const loginUser = async (req, res) => {
         .json({ error: "Username or email was not found." });
     }
 
-    const hashedPassword = result.rows[0].password;
+    const foundUser = result.rows[0];
     const inputPassword = req.body.password;
 
-    if (await comparePassword(inputPassword, hashedPassword)) {
-      res.status(200).json({ message: "Successfully logged in!" });
-      console.log("Login successful");
+    if (await comparePassword(inputPassword, foundUser.password)) {
+      // Generate and send JWT
+      const payload = { userId: foundUser.id, username: foundUser.username };
+      const token = generateJWT(payload);
+      res.status(200).json({ message: "Successfully logged in!", token });
     } else {
       res
         .status(401)
@@ -109,6 +117,8 @@ export const loginUser = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error. " });
   }
 };
+
+// POST -- CONSIDER ADDING A RESET/FORGOT PASSWORD endpoint
 
 // PUT function - update user by specified id
 export const updateUser = async (req, res) => {
