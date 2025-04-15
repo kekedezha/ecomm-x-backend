@@ -8,13 +8,13 @@ import {
   updateUser,
   deleteUser,
 } from "../controllers/users.controller";
-import { authenticateToken } from "../middleware/auth";
+import { authenticateToken, authorizeRoles } from "../middleware/auth";
 
 // Initialize a router instance to use with 'users' routes
 const router = Router();
 
 // GET HTTP route for retrieving all of the users from the db - ADMIN ONLY
-router.get("/admin", getAllUsers);
+router.get("/admin", authenticateToken, authorizeRoles("admin"), getAllUsers);
 
 // GET HTTP route for getting a single user from the db
 router.get("/:userId", authenticateToken, getUserById);
