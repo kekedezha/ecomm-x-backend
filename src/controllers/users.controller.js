@@ -56,11 +56,19 @@ export const registerNewUser = async (req, res) => {
 
     const result = await pool.query(
       "INSERT INTO users (username, email, password, first_name, last_name, address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, username, first_name",
-      [username, email, hash, firstName, lastName, address]
+      [id, username, email, hash, firstName, lastName, address]
     );
+    // TODO: CREATE JWT to send back to user after successful user creation
+    const payload = {
+      id: result.rows[0].id,
+      username: result.rows[0].username,
+      role: "user",
+    };
+    const token = generateJWT(payload);
     res.status(201).json({
       message: "Successfully created new user!",
       user: result.rows[0],
+      token,
     });
   } catch (error) {
     if (error.code == "23505") {
@@ -103,7 +111,16 @@ export const loginUser = async (req, res) => {
 
     if (await comparePassword(inputPassword, foundUser.password)) {
       // Generate and send JWT
-      const payload = { userId: foundUser.id, username: foundUser.username };
+      if (foundUser.id == 1) {
+        foundUser.role = "admin";
+      } else {
+        foundUser.role = "user";
+      }
+      const payload = {
+        id: foundUser.id,
+        username: foundUser.username,
+        role: foundUser.role,
+      };
       const token = generateJWT(payload);
       res.status(200).json({ message: "Successfully logged in!", token });
     } else {
