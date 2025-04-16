@@ -56,7 +56,7 @@ export const registerNewUser = async (req, res) => {
 
     const result = await pool.query(
       "INSERT INTO users (username, email, password, first_name, last_name, address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, username, first_name",
-      [id, username, email, hash, firstName, lastName, address]
+      [username, email, hash, firstName, lastName, address]
     );
     // TODO: CREATE JWT to send back to user after successful user creation
     const payload = {

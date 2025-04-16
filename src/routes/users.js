@@ -8,7 +8,11 @@ import {
   updateUser,
   deleteUser,
 } from "../controllers/users.controller";
-import { authenticateToken, authorizeRoles } from "../middleware/auth";
+import {
+  authenticateToken,
+  authorizeRoles,
+  isSameUser,
+} from "../middleware/auth";
 
 // Initialize a router instance to use with 'users' routes
 const router = Router();
@@ -17,7 +21,7 @@ const router = Router();
 router.get("/admin", authenticateToken, authorizeRoles("admin"), getAllUsers);
 
 // GET HTTP route for getting a single user from the db
-router.get("/:userId", authenticateToken, getUserById);
+router.get("/:userId", authenticateToken, isSameUser, getUserById);
 
 // POST HTTP route for creating a new user to the db
 router.post("/register", registerNewUser);
@@ -26,9 +30,9 @@ router.post("/register", registerNewUser);
 router.post("/login", loginUser);
 
 // PUT HTTP route for updating a users info
-router.put("/:userId", authenticateToken, updateUser);
+router.put("/:userId", authenticateToken, isSameUser, updateUser);
 
 // DELETE HTTP route for deleting a user
-router.delete("/:userId", authenticateToken, deleteUser);
+router.delete("/:userId", authenticateToken, isSameUser, deleteUser);
 
 export default router;
