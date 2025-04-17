@@ -10,6 +10,7 @@ app.use(express.urlencoded({ extended: true })); // parse URL-encoded data (e.g.
 app.use("/cart-items", routes.cartItems); // prefix for 'cart-items' routes
 app.use("/carts", routes.carts); // prefix for 'carts' routes
 app.use("/categories", routes.categories); // prefix for 'categories' routes
+app.use("/checkout", routes.checkout); // prefix for 'checkout' routes
 app.use("/order-items", routes.orderItems); // prefix for 'order-items' routes
 app.use("/orders", routes.orders); // prefix for 'orders' routes
 app.use("/payments", routes.payments); // prefix for 'payments' routes

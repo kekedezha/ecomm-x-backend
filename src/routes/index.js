@@ -6,6 +6,7 @@ import orderItems from "./order_items";
 import categories from "./categories";
 import carts from "./carts";
 import cartItems from "./cart_items";
+import checkout from "./checkout";
 
 export default {
   users,
@@ -16,4 +17,5 @@ export default {
   categories,
   carts,
   cartItems,
+  checkout,
 };
