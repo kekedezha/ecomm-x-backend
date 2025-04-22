@@ -14,6 +14,7 @@ What started off as a general e-commerce REST API, hence the name ecomm-x-backen
 - `Node.js`
 - `Express.js`
 - `PostgreSQL`
+- `node-postgres`
 - `bcrypt`
 - `Jest`
 - `Supertest`
