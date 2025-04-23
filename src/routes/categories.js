@@ -7,6 +7,7 @@ import {
   updateCategory,
   deleteCategory,
 } from "../controllers/categories.controller";
+import { authenticateToken, authorizeRoles } from "../middleware/auth";
 
 // Initialize a router instance to use with 'categories' routes
 const router = Router();
@@ -17,13 +18,23 @@ router.get("/", getAllCategories);
 // GET HTTP route for getting a single category from the db
 router.get("/:categoryId/products", getProdsByCategory);
 
-// POST HTTP route for creating a new category to the db
-router.post("/", createNewCategory);
+// POST HTTP route for creating a new category -- ADMIN ONLY
+router.post("/", authenticateToken, authorizeRoles("admin"), createNewCategory);
 
-// PUT HTTP route for updating a category
-router.put("/:categoryId", updateCategory);
+// PUT HTTP route for updating a category -- ADMIN ONLY
+router.put(
+  "/:categoryId",
+  authenticateToken,
+  authorizeRoles("admin"),
+  updateCategory
+);
 
-// DELETE HTTP route for deleting a category
-router.delete("/:categoryId", deleteCategory);
+// DELETE HTTP route for deleting a category -- ADMIN ONLY
+router.delete(
+  "/:categoryId",
+  authenticateToken,
+  authorizeRoles("admin"),
+  deleteCategory
+);
 
 export default router;
