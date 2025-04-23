@@ -4,6 +4,8 @@ import {
   hashPassword,
   comparePassword,
   generateJWT,
+  createUserCart,
+  checkIfCartExists,
 } from "../helpers/users.helper";
 
 // GET function - retrieve all users ADMIN ONLY
@@ -58,11 +60,14 @@ export const registerNewUser = async (req, res) => {
       "INSERT INTO users (username, email, password, first_name, last_name, address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, username, first_name",
       [username, email, hash, firstName, lastName, address]
     );
-    // TODO: CREATE JWT to send back to user after successful user creation
+
+    const cart_id = await createUserCart(result.rows[0].id);
+
     const payload = {
       id: result.rows[0].id,
       username: result.rows[0].username,
       role: "user",
+      cart_id,
     };
     const token = generateJWT(payload);
     res.status(201).json({
@@ -116,18 +121,28 @@ export const loginUser = async (req, res) => {
       } else {
         foundUser.role = "user";
       }
+
+      const existingCart = await checkIfCartExists(foundUser.id);
+      if (!existingCart) {
+        const cart_id = await createUserCart(foundUser.id);
+        foundUser.cart_id = cart_id;
+      } else {
+        foundUser.cart_id = existingCart;
+      }
+
       const payload = {
         id: foundUser.id,
         username: foundUser.username,
         role: foundUser.role,
+        cart_id: foundUser.cart_id,
       };
       const token = generateJWT(payload);
       res.status(200).json({ message: "Successfully logged in!", token });
     } else {
+      console.log(`Unsuccessful login by ${user}`);
       res
         .status(401)
         .json({ message: "Incorrect password. Please try again." });
-      console.log(`Unsuccessful login by ${user}`);
     }
   } catch (error) {
     console.log("Error logging in: ", error);
