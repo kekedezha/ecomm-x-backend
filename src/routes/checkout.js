@@ -7,3 +7,5 @@ const router = Router();
 
 // POST HTTP route to process a payment and finalize an order
 router.post("/:userId", finalizeOrder);
+
+export default router;
