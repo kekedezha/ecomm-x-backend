@@ -3,6 +3,7 @@ import pool from "../db";
 // GET function to retrieve current cart for user
 export const getUsersCurrentCart = async (req, res) => {
   try {
+    const result = await pool.query("SELECT ");
   } catch (error) {
     console.log("Error fetching cart: ", error);
     res.status(500).json({ error: "Internal Server Error." });
@@ -12,6 +13,7 @@ export const getUsersCurrentCart = async (req, res) => {
 // POST function to add a product to the cart
 export const addProductToCart = async (req, res) => {
   try {
+    // Fetch product that will be added to cart_items table
   } catch (error) {
     console.log("Error adding product to cart: ", error);
     res.status(500).json({ error: "Internal Server Error." });

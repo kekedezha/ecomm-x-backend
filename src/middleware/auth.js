@@ -32,12 +32,13 @@ export const isSameUser = (req, res, next) => {
 };
 
 /**
- * JWT payload from jwt.verify()
+ * JWT payload from jwt.sign()
  * -----------------------------
  * jwt payload = {
  *  id: 'xxxx',
  *  username: 'xxxx',
  *  role: 'user',
+ *  cart_id: 'xxxx',
  * }
  */
 
@@ -46,6 +47,7 @@ export const isSameUser = (req, res, next) => {
  *  id: 'xxxx',
  *  username: 'xxxx',
  *  role: 'user',
+ *  cart_id: 'xxxx',
  *  iat: 999999  // issued at,
  *  eat: 999999  // expires at,
  * }
