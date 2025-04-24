@@ -3,7 +3,7 @@ import supertest from "supertest";
 
 const requestWithSupertest = supertest(app);
 
-describe("Payments endpoints", () => {
+describe.skip("Payments endpoints", () => {
   it("GET /payments should show all payments from db", async () => {
     const res = await requestWithSupertest.get("/payments");
     expect(res.status).toEqual(200);

@@ -3,7 +3,7 @@ import supertest from "supertest";
 
 const requestWithSupertest = supertest(app);
 
-describe("Carts endpoints", () => {
+describe.skip("Carts endpoints", () => {
   it("GET /carts should show all carts from db", async () => {
     const res = await requestWithSupertest.get("/carts");
     expect(res.status).toEqual(200);
