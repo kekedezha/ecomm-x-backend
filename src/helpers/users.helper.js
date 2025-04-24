@@ -53,3 +53,20 @@ export const checkIfCartExists = async (userId) => {
     throw error;
   }
 };
+
+// function to check if a cart has the product
+export const isProductInCart = async (cartId, productId) => {
+  try {
+    const doesProductExist = await pool.query(
+      "SELECT * from cart_items WHERE cart_id = $1 AND product_id = $2",
+      [cartId, productId]
+    );
+    if (doesProductExist.rows.length == 0) {
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.log("Error checking products in cart: ", error);
+    throw error;
+  }
+};
