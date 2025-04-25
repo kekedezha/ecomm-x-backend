@@ -8,6 +8,7 @@ import {
   clearCart,
 } from "../controllers/carts.controller";
 import { authenticateToken, isSameUser } from "../middleware/auth";
+import { checkIfCartExists } from "../helpers/users.helper";
 
 // Initialize a router instance to use with 'carts' routes
 const router = Router();
@@ -16,7 +17,13 @@ const router = Router();
 router.get("/:userId", authenticateToken, isSameUser, getUsersCurrentCart);
 
 // POST HTTP route for adding a product to the cart
-router.post("/:userId", authenticateToken, isSameUser, addProductToCart);
+router.post(
+  "/:userId",
+  authenticateToken,
+  isSameUser,
+  checkIfCartExists,
+  addProductToCart
+);
 
 // PUT HTTP route for updating quantity of a product in the cart
 router.put(
