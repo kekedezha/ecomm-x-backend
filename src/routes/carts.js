@@ -8,7 +8,7 @@ import {
   clearCart,
 } from "../controllers/carts.controller";
 import { authenticateToken, isSameUser } from "../middleware/auth";
-import { checkIfCartExists } from "../helpers/users.helper";
+import { isValidProduct } from "../middleware/cart.middleware";
 
 // Initialize a router instance to use with 'carts' routes
 const router = Router();
@@ -21,7 +21,7 @@ router.post(
   "/:userId",
   authenticateToken,
   isSameUser,
-  checkIfCartExists,
+  isValidProduct,
   addProductToCart
 );
 

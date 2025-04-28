@@ -1,6 +1,6 @@
 import pool from "../db";
 
-export const checkIfProdExistsInDB = async (req, res, next) => {
+export const isValidProduct = async (req, res, next) => {
   try {
     const productId = parseInt(req.body.productId);
     const result = await pool.query("SELECT * FROM products WHERE id = $1", [
