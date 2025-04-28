@@ -20,7 +20,7 @@ export const getUsersCurrentCart = async (req, res) => {
 export const addProductToCart = async (req, res) => {
   try {
     const cartId = parseInt(req.user.cart_id, 10);
-    const productExistsInCart = isProductInCart(cartId, req.productId);
+    const productExistsInCart = await isProductInCart(cartId, req.productId);
 
     if (!productExistsInCart) {
       const result = await pool.query(
