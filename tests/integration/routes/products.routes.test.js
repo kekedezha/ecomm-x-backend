@@ -6,6 +6,8 @@ const requestWithSupertest = supertest(app);
 
 describe("Products endpoints", () => {
   let productId;
+
+  // GET REQUEST TESTS
   describe("GET HTTP method to retrieve all products", () => {
     it("GET /products should show all products from db", async () => {
       const res = await requestWithSupertest.get("/products");
@@ -47,6 +49,7 @@ describe("Products endpoints", () => {
     });
   });
 
+  // POST REQUEST TESTS
   describe("POST HTTP method to add a new product to the database", () => {
     it("POST /products should add a new product, a concha", async () => {
       const res = await requestWithSupertest.post("/products").send({
@@ -87,6 +90,7 @@ describe("Products endpoints", () => {
     });
   });
 
+  // PUT REQUEST TESTS
   describe("PUT HTTP method to update/modify a product from the database", () => {
     it("PUT /products/xx should update the product created in the POST request to /products and update the name be Oreja", async () => {
       const res = await requestWithSupertest
@@ -124,6 +128,7 @@ describe("Products endpoints", () => {
     });
   });
 
+  // DELETE REQUEST TESTS
   describe("DELETE HTTP method to delete a specified product from the database", () => {
     it("DELETE /products/xx should delete the product created by the POST request sent to the /products path from the database", async () => {
       const res = await requestWithSupertest.delete(`/products/${productId}`);

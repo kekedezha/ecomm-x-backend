@@ -26,6 +26,7 @@ beforeAll(async () => {
 });
 
 describe("Users endpoints", () => {
+  // GET REQUEST TESTS
   describe("GET HTTP method to retrieve all users", () => {
     it("GET /users/admin should show all users from db", async () => {
       const res = await requestWithSupertest
@@ -73,6 +74,7 @@ describe("Users endpoints", () => {
     });
   });
 
+  // POST REQUEST TESTS
   describe("POST HTTP method to register a new user to the database", () => {
     it("POST /users/register should add a new user, Luffy", async () => {
       const res = await requestWithSupertest.post("/users/register").send({
@@ -122,6 +124,7 @@ describe("Users endpoints", () => {
     });
   });
 
+  // PUT REQUEST TESTS
   describe("PUT HTTP method to update/modify a user from the database", () => {
     it(`PUT /users/xx should update the user created in the POST request to /users/register path and update the name be Nika`, async () => {
       const res = await requestWithSupertest
@@ -172,6 +175,7 @@ describe("Users endpoints", () => {
     });
   });
 
+  // DELETE REQUEST TESTS
   describe("DELETE HTTP method to delete a specified user from the database", () => {
     it(`DELETE /users/xx should delete the user created in the POST request to the path /users/register from the database`, async () => {
       const res = await requestWithSupertest
