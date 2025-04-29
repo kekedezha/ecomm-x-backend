@@ -112,7 +112,7 @@ export const clearCart = async (req, res) => {
       [cartId]
     );
     if (result.rows.length == 0) {
-      res.status(404).json({ error: "No products in cart to delete." });
+      return res.status(404).json({ error: "No products in cart to delete." });
     }
     res.status(200).json({
       message: "Successfully deleted all products from cart.",
