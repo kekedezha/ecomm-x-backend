@@ -54,15 +54,20 @@ export const updateProductQty = async (req, res) => {
     const cartId = parseInt(req.user.cart_id, 10);
     const productId = parseInt(req.params.productId, 10);
     const quantity = parseInt(req.body.quantity, 10);
+    if (isNaN(productId)) {
+      return res
+        .status(404)
+        .json({ error: "Bad Request. Not a valid product." });
+    }
     const result = await pool.query(
       "UPDATE cart_items SET quantity = $1 WHERE cart_id = $2 AND product_id = $3 RETURNING *",
       [quantity, cartId, productId]
     );
     if (result.rows.length == 0) {
-      res.status(404).json({ error: "Product not in cart." });
+      return res.status(404).json({ error: "Product not in cart." });
     }
     res.status(200).json({
-      message: "Successfully updated quantity of product",
+      message: "Successfully updated quantity of product.",
       updatedProduct: result.rows[0],
     });
   } catch (error) {
@@ -76,12 +81,17 @@ export const deleteProdFromCart = async (req, res) => {
   try {
     const cartId = parseInt(req.user.cart_id, 10);
     const productId = parseInt(req.params.productId, 10);
+    if (isNaN(productId)) {
+      return res
+        .status(404)
+        .json({ error: "Bad Request. Not a valid product." });
+    }
     const result = await pool.query(
       "DELETE FROM cart_items WHERE cart_id = $1 AND product_id = $2 RETURNING *",
       [cartId, productId]
     );
     if (result.rows.length == 0) {
-      res.status(404).json({ error: "Product not in cart." });
+      return res.status(404).json({ error: "Product not in cart." });
     }
     res.status(200).json({
       message: "Successfully deleted product from cart.",
