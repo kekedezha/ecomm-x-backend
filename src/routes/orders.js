@@ -3,7 +3,7 @@ import { Router } from "express";
 import {
   getAllUserOrders,
   getOrderForUser,
-  createOrder,
+  createOrderFromCart,
   updateOrderStatus,
   deleteUserOrder,
 } from "../controllers/orders.controller";
@@ -23,7 +23,7 @@ router.get("/:userId", authenticateToken, isSameUser, getAllUserOrders);
 router.get("/:userId/:orderId", authenticateToken, isSameUser, getOrderForUser);
 
 // POST HTTP route for creating an order from the cart
-router.post("/:userId", authenticateToken, isSameUser, createOrder);
+router.post("/:userId", authenticateToken, isSameUser, createOrderFromCart);
 
 // PUT HTTP route for updating order status
 router.put(
