@@ -1,6 +1,7 @@
 // Import 'Router' class from the express module to create modular route handlers
 import { Router } from "express";
 import {
+  getAllOrders,
   getAllUserOrders,
   getOrderForUser,
   createOrderFromCart,
@@ -17,6 +18,7 @@ import {
 const router = Router();
 
 // GET HTTP route for retrieving all orders stored in db -- ADMIN ONLY
+router.get("/admin", authenticateToken, authorizeRoles("admin"), getAllOrders);
 
 // GET HTTP route for retrieving all of the orders for specified user
 router.get("/:userId", authenticateToken, isSameUser, getAllUserOrders);
