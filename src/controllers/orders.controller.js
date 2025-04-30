@@ -1,6 +1,17 @@
 import pool from "../db";
 import { doesOrderExistForUser } from "../helpers/orders.helper";
 
+// GET function for retrieving all orders for all users -- ADMIN ONLY
+export const getAllOrders = async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * from orders");
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.log("Error fetching orders: ", error);
+    res.status(500).json({ error: "Internal Server Error." });
+  }
+};
+
 // GET function for retrieving all orders for user
 export const getAllUserOrders = async (req, res) => {
   try {
@@ -121,12 +132,10 @@ export const updateOrderStatus = async (req, res) => {
       "UPDATE orders SET status = $1 RETURNING *",
       [newStatus]
     );
-    res
-      .status(200)
-      .json({
-        message: "Successfully updated status of order.",
-        updatedOrder: result.rows[0],
-      });
+    res.status(200).json({
+      message: "Successfully updated status of order.",
+      updatedOrder: result.rows[0],
+    });
   } catch (error) {
     console.log("Error updating order status: ", error);
     res.status(500).json({ error: "Internal Server Error." });

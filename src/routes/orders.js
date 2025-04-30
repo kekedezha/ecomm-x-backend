@@ -16,6 +16,8 @@ import {
 // Initialize a router instance to use with 'orders' routes
 const router = Router();
 
+// GET HTTP route for retrieving all orders stored in db -- ADMIN ONLY
+
 // GET HTTP route for retrieving all of the orders for specified user
 router.get("/:userId", authenticateToken, isSameUser, getAllUserOrders);
 
