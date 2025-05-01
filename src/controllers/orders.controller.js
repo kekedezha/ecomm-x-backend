@@ -15,10 +15,8 @@ export const getAllOrders = async (req, res) => {
 // GET function for retrieving all orders for user
 export const getAllUserOrders = async (req, res) => {
   try {
-    console.log(typeof req.user.id);
-    const userId = parseInt(req.user.id, 10);
     const result = await pool.query("SELECT * FROM orders WHERE user_id = $1", [
-      userId,
+      req.user.id,
     ]);
     res.status(200).json(result.rows);
   } catch (error) {
@@ -66,7 +64,7 @@ export const createOrderFromCart = async (req, res) => {
     );
     const cartItems = cartItemRes.rows;
     if (cartItems.length == 0) {
-      res.status(404).json({ error: "Cart is empty." });
+      return res.status(404).json({ error: "Cart is empty." });
     }
 
     // STEP 2: CALCULATE TOTAL PRICE
@@ -115,22 +113,26 @@ export const createOrderFromCart = async (req, res) => {
 // PUT function for updating order status -- ADMIN ONLY
 export const updateOrderStatus = async (req, res) => {
   try {
+    const userId = parseInt(req.params.userId, 10);
     const orderId = parseInt(req.params.orderId, 10);
     if (isNaN(orderId)) {
       return res.status(400).json({ error: "Bad Request. Invalid Order ID." });
     }
+    if (!(await doesOrderExistForUser(userId, orderId))) {
+      return res.status(404).json({ error: "Order not found." });
+    }
     const newStatus = req.body.statusUpdate;
     if (
-      newStatus != "PROCESSING" ||
-      newStatus != "READY FOR PICK-UP" ||
-      newStatus != "COMPLETE" ||
+      newStatus != "PROCESSING" &&
+      newStatus != "READY FOR PICK-UP" &&
+      newStatus != "COMPLETE" &&
       newStatus != "CANCELLED"
     ) {
       return res.status(400).json({ error: "Bad Request. Invalid status." });
     }
     const result = await pool.query(
-      "UPDATE orders SET status = $1 RETURNING *",
-      [newStatus]
+      "UPDATE orders SET status = $1 WHERE id = $2 AND user_id = $3 RETURNING *",
+      [newStatus, orderId, userId]
     );
     res.status(200).json({
       message: "Successfully updated status of order.",
