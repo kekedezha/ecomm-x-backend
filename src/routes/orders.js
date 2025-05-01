@@ -13,6 +13,7 @@ import {
   authorizeRoles,
   isSameUser,
 } from "../middleware/auth";
+import { checkIfUserExists } from "../middleware/orders.middleware";
 
 // Initialize a router instance to use with 'orders' routes
 const router = Router();
@@ -31,15 +32,16 @@ router.post("/:userId", authenticateToken, isSameUser, createOrderFromCart);
 
 // PUT HTTP route for updating order status
 router.put(
-  "/:userId/:orderId",
+  "/admin/:userId/:orderId",
   authenticateToken,
   authorizeRoles("admin"),
+  checkIfUserExists,
   updateOrderStatus
 );
 
-// DELETE HTTP route for deleting/canceling an order
+// DELETE HTTP route for deleting an order
 router.delete(
-  "/:userId/:orderId",
+  "/admin/:orderId",
   authenticateToken,
   authorizeRoles("admin"),
   deleteUserOrder
