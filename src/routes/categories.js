@@ -19,11 +19,16 @@ router.get("/", getAllCategories);
 router.get("/:categoryId/products", getProdsByCategory);
 
 // POST HTTP route for creating a new category -- ADMIN ONLY
-router.post("/", authenticateToken, authorizeRoles("admin"), createNewCategory);
+router.post(
+  "/admin",
+  authenticateToken,
+  authorizeRoles("admin"),
+  createNewCategory
+);
 
 // PUT HTTP route for updating a category -- ADMIN ONLY
 router.put(
-  "/:categoryId",
+  "/admin/:categoryId",
   authenticateToken,
   authorizeRoles("admin"),
   updateCategory
@@ -31,7 +36,7 @@ router.put(
 
 // DELETE HTTP route for deleting a category -- ADMIN ONLY
 router.delete(
-  "/:categoryId",
+  "/admin/:categoryId",
   authenticateToken,
   authorizeRoles("admin"),
   deleteCategory
