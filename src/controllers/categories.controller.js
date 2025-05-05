@@ -52,7 +52,7 @@ export const createNewCategory = async (req, res) => {
     );
     res.status(201).json({
       message: "Successfully created new category.",
-      new_category: res.rows[0],
+      new_category: result.rows[0],
     });
   } catch (error) {
     console.log("Error creating category: ", error);
@@ -77,12 +77,10 @@ export const updateCategory = async (req, res) => {
       "UPDATE categories SET name = $1 WHERE id = $2 RETURNING *",
       [categoryUpdate, categoryId]
     );
-    res
-      .status(200)
-      .json({
-        message: "Successfully updated category name.",
-        updatedCategory: res.rows[0],
-      });
+    res.status(200).json({
+      message: "Successfully updated category name.",
+      updatedCategory: result.rows[0],
+    });
   } catch (error) {
     console.log("Error updating category: ", error);
     res.status(500).json({ error: "Internal Server Error." });
@@ -98,7 +96,10 @@ export const deleteCategory = async (req, res) => {
         .status(400)
         .json({ error: "Bad Request. Invalid Category ID." });
     }
-    const result = await pool.query("DELETE FROM categories WHERE id = $1");
+    const result = await pool.query(
+      "DELETE FROM categories WHERE id = $1 RETURNING *",
+      [categoryId]
+    );
     if (result.rows.length == 0) {
       return res.status(404).json({ error: "Category not found." });
     }
