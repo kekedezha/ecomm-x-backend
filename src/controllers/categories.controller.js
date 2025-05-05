@@ -77,6 +77,9 @@ export const updateCategory = async (req, res) => {
       "UPDATE categories SET name = $1 WHERE id = $2 RETURNING *",
       [categoryUpdate, categoryId]
     );
+    if (result.rows.length == 0) {
+      return res.status(404).json({ error: "Category not found." });
+    }
     res.status(200).json({
       message: "Successfully updated category name.",
       updatedCategory: result.rows[0],

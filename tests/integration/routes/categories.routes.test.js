@@ -108,19 +108,86 @@ describe("Categories endpoints", () => {
   });
 
   // PUT REQUEST TESTS
-  describe.skip("PUT HTTP method to update a category", () => {
-    it("PUT /categories/admin/:categoryId should update categories with specified categoryId", async () => {
-      const res = await requestWithSupertest.put("/categories/admin/2");
+  describe("PUT HTTP method to update a category", () => {
+    it("PUT /categories/admin/xx should fail to update a category because they are not logged in as an admin", async () => {
+      const res = await requestWithSupertest
+        .put(`/categories/admin/${newCategoryId}`)
+        .set("Authorization", `Bearer ${userToken}`);
+      expect(res.status).toEqual(403);
+      expect(res.type).toEqual(expect.stringContaining("json"));
+      expect(res.body.error).toEqual("Access denied.");
+    });
+
+    it("PUT /categories/admin/bread should fail to update a category because of an invalid category id", async () => {
+      const res = await requestWithSupertest
+        .put(`/categories/admin/bread`)
+        .set("Authorization", `Bearer ${adminToken}`);
+      expect(res.status).toEqual(400);
+      expect(res.type).toEqual(expect.stringContaining("json"));
+      expect(res.body.error).toEqual("Bad Request. Invalid Category ID.");
+    });
+
+    it("PUT /categories/admin/xx should fail to update a category because nothing was sent over", async () => {
+      const res = await requestWithSupertest
+        .put(`/categories/admin/${newCategoryId}`)
+        .set("Authorization", `Bearer ${adminToken}`);
+      expect(res.status).toEqual(400);
+      expect(res.type).toEqual(expect.stringContaining("json"));
+      expect(res.body.error).toEqual("Bad Request. Missing update.");
+    });
+
+    it("PUT /categories/admin/999 should fail to update a category because there is no category with the matching id", async () => {
+      const res = await requestWithSupertest
+        .put(`/categories/admin/999`)
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ categoryUpdate: "Sour Treat" });
+      expect(res.status).toEqual(404);
+      expect(res.type).toEqual(expect.stringContaining("json"));
+      expect(res.body.error).toEqual("Category not found.");
+    });
+
+    it("PUT /categories/admin/xx should update categories with specified categoryId", async () => {
+      const res = await requestWithSupertest
+        .put(`/categories/admin/${newCategoryId}`)
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ categoryUpdate: "Sour Treat" });
       expect(res.status).toEqual(200);
-      expect(res.text).toEqual(
-        "PUT HTTP method on categories resource for categories/:2"
-      );
+      expect(res.type).toEqual(expect.stringContaining("json"));
+      expect(res.body.message).toEqual("Successfully updated category name.");
     });
   });
 
   // DELETE REQUEST TESTS
   describe("DELETE HTTP method to delete a category from the db", () => {
-    it("DELETE /categories/admin/:categoryId should delete categories with specified categoryId", async () => {
+    it("DELETE /categories/admin/xx should fail to delete a category because they are not logged in as an admin", async () => {
+      const res = await requestWithSupertest
+        .delete(`/categories/admin/${newCategoryId}`)
+        .set("Authorization", `Bearer ${userToken}`);
+      expect(res.status).toEqual(403);
+      expect(res.type).toEqual(expect.stringContaining("json"));
+      expect(res.body.error).toEqual("Access denied.");
+    });
+
+    it("DELETE /categories/admin/bread should fail to delete a category because of an invalid category id", async () => {
+      const res = await requestWithSupertest
+        .delete(`/categories/admin/bread`)
+        .set("Authorization", `Bearer ${adminToken}`);
+      expect(res.status).toEqual(400);
+      expect(res.type).toEqual(expect.stringContaining("json"));
+      expect(res.body.error).toEqual("Bad Request. Invalid Category ID.");
+    });
+
+    it("DELETE /categories/admin/999 should fail to delete a category because there is no category with the matching id", async () => {
+      const res = await requestWithSupertest
+        .delete(`/categories/admin/999`)
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ categoryUpdate: "Sour Treat" });
+      expect(res.status).toEqual(404);
+      expect(res.type).toEqual(expect.stringContaining("json"));
+      expect(res.body.error).toEqual("Category not found.");
+    });
+
+    it("DELETE /categories/admin/xx should delete categories with specified categoryId", async () => {
       const res = await requestWithSupertest
         .delete(`/categories/admin/${newCategoryId}`)
         .set("Authorization", `Bearer ${adminToken}`);
