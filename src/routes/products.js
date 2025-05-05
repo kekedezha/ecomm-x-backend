@@ -7,6 +7,7 @@ import {
   updateProduct,
   deleteProduct,
 } from "../controllers/products.controller";
+import { authenticateToken, authorizeRoles } from "../middleware/auth";
 
 // Initialize a router instance to use with 'products' routes
 const router = Router();
@@ -18,12 +19,27 @@ router.get("/", getAllProducts);
 router.get("/:productId", getProductById);
 
 // POST HTTP route for creating a new product to the db
-router.post("/", addNewProduct);
+router.post(
+  "/admin",
+  authenticateToken,
+  authorizeRoles("admin"),
+  addNewProduct
+);
 
 // PUT HTTP route for updating a product
-router.put("/:productId", updateProduct);
+router.put(
+  "/admin/:productId",
+  authenticateToken,
+  authorizeRoles("admin"),
+  updateProduct
+);
 
 // DELETE HTTP route for deleting a product
-router.delete("/:productId", deleteProduct);
+router.delete(
+  "/admin/:productId",
+  authenticateToken,
+  authorizeRoles("admin"),
+  deleteProduct
+);
 
 export default router;

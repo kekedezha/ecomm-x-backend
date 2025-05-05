@@ -14,6 +14,11 @@ export const getAllProducts = async (req, res) => {
 export const getProductById = async (req, res) => {
   try {
     const productId = parseInt(req.params.productId);
+    if (isNaN(productId)) {
+      return res
+        .status(400)
+        .json({ error: "Bad Request. Invalid product id." });
+    }
     const result = await pool.query("SELECT * FROM products WHERE id = $1", [
       productId,
     ]);
