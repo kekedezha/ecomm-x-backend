@@ -115,6 +115,12 @@ export const updateOrderStatus = async (req, res) => {
   try {
     const userId = parseInt(req.params.userId, 10);
     const orderId = parseInt(req.params.orderId, 10);
+    const validAdminStatuses = [
+      "PROCESSING",
+      "READY FOR PICK-UP",
+      "COMPLETE",
+      "CANCELLED",
+    ];
     if (isNaN(orderId)) {
       return res.status(400).json({ error: "Bad Request. Invalid Order ID." });
     }
@@ -122,12 +128,7 @@ export const updateOrderStatus = async (req, res) => {
       return res.status(404).json({ error: "Order not found." });
     }
     const newStatus = req.body.statusUpdate;
-    if (
-      newStatus != "PROCESSING" &&
-      newStatus != "READY FOR PICK-UP" &&
-      newStatus != "COMPLETE" &&
-      newStatus != "CANCELLED"
-    ) {
+    if (!validAdminStatuses.includes(newStatus)) {
       return res.status(400).json({ error: "Bad Request. Invalid status." });
     }
     const result = await pool.query(
