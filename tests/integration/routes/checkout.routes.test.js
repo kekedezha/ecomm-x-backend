@@ -10,6 +10,8 @@ let userLogin;
 let userToken;
 let orderIdOne;
 let orderIdTwo;
+let orderIdThree;
+let orderThreeTotal;
 
 beforeAll(async () => {
   // Login with admin role to use throughout admin/protected routes
@@ -26,41 +28,174 @@ beforeAll(async () => {
   userToken = userLogin.body.token;
 });
 
-describe.skip("Payments endpoints", () => {
-  it("GET /payments should show all payments from db", async () => {
-    const res = await requestWithSupertest.get("/payments");
-    expect(res.status).toEqual(200);
-    expect(res.text).toEqual("General GET HTTP method on payments resource");
+describe("Checkout endpoints", () => {
+  it("POST /checkout/2 should fail to checkout and mark an order as paid because the user is not logged in", async () => {
+    const res = await requestWithSupertest.post("/checkout/2");
+    expect(res.status).toEqual(401);
+    expect(res.type).toEqual(expect.stringContaining("json"));
+    expect(res.body.error).toEqual("User is unauthorized.");
   });
 
-  it("GET /payments/:paymentId should show payment with specified paymentId", async () => {
-    const res = await requestWithSupertest.get("/payments/:1");
-    expect(res.status).toEqual(200);
-    expect(res.text).toEqual(
-      "GET HTTP method on payments resource for payments/:1"
+  it("POST /checkout/3 should fail to checkout and mark an order as paid because the user id does not match the user id of the logged in user", async () => {
+    const res = await requestWithSupertest
+      .post("/checkout/3")
+      .set("Authorization", `Bearer ${userToken}`);
+    expect(res.status).toEqual(401);
+    expect(res.type).toEqual(expect.stringContaining("json"));
+    expect(res.body.error).toEqual(
+      "User is not authorized to view user information that is not one's self."
     );
   });
 
-  it("POST /payments should create a new payment to the payments table", async () => {
-    const res = await requestWithSupertest.post("/payments");
-    expect(res.status).toEqual(201);
-    expect(res.text).toEqual("POST HTTP method on payments resource");
-  });
-
-  it("PUT /payments/:paymentId should update payment with specified paymentId", async () => {
-    const res = await requestWithSupertest.put("/payments/:2");
-    expect(res.status).toEqual(200);
-    expect(res.text).toEqual(
-      "PUT HTTP method on payments resource for payments/:2"
+  it("POST /checkout/2 should fail to checkout and mark an order as paid because an invalid orderId was sent", async () => {
+    const res = await requestWithSupertest
+      .post("/checkout/2")
+      .set("Authorization", `Bearer ${userToken}`);
+    expect(res.status).toEqual(400);
+    expect(res.type).toEqual(expect.stringContaining("json"));
+    expect(res.body.error).toEqual(
+      "Bad request. Invalid order id. Order id must be a number."
     );
   });
 
-  it("DELETE /payments/:paymentId should delete payment with specified paymentId", async () => {
-    const res = await requestWithSupertest.delete("/payments/:3");
-    expect(res.status).toEqual(200);
-    expect(res.text).toEqual(
-      "DELETE HTTP method on payments resource for payments/:3"
+  it("POST /checkout/2 should fail to checkout and mark an order as paid because an invalid amount was sent", async () => {
+    const res = await requestWithSupertest
+      .post("/checkout/2")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({ orderId: 9090 });
+    expect(res.status).toEqual(400);
+    expect(res.type).toEqual(expect.stringContaining("json"));
+    expect(res.body.error).toEqual(
+      "Bad request. Invalid order amount. Amount must be a number."
     );
+  });
+
+  it("POST /checkout/2 should fail to checkout and mark an order as paid because the payment method is missing", async () => {
+    const res = await requestWithSupertest
+      .post("/checkout/2")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({ orderId: 9090, amount: 20.99 });
+    expect(res.status).toEqual(400);
+    expect(res.type).toEqual(expect.stringContaining("json"));
+    expect(res.body.error).toEqual("Bad request. Missing payment method.");
+  });
+
+  it("POST /checkout/2 should fail to checkout and mark an order as paid because the order id sent over was not found", async () => {
+    const res = await requestWithSupertest
+      .post("/checkout/2")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({ orderId: 9090, amount: 20.99, paymentMethod: "Credit Card" });
+    expect(res.status).toEqual(404);
+    expect(res.type).toEqual(expect.stringContaining("json"));
+    expect(res.body.error).toEqual("Order id not found.");
+  });
+
+  it("POST /checkout/2 should fail to checkout and mark an order as paid because the order does not have a status of 'PENDING' and therefor is not eligible for checkout", async () => {
+    const productOneAdditionRes = await requestWithSupertest
+      .post("/carts/2")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({ productId: 1, quantity: 1 });
+    expect(productOneAdditionRes.status).toEqual(201);
+    const productTwoAdditionRes = await requestWithSupertest
+      .post("/carts/2")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({ productId: 5, quantity: 3 });
+    expect(productTwoAdditionRes.status).toEqual(201);
+    const createOrderOneRes = await requestWithSupertest
+      .post("/orders/2")
+      .set("Authorization", `Bearer ${userToken}`);
+    orderIdOne = createOrderOneRes.body.order_id;
+    expect(createOrderOneRes.status).toEqual(201);
+    const statusUpdateOrderOneRes = await requestWithSupertest
+      .put(`/orders/admin/2/${orderIdOne}`)
+      .set("Authorization", `Bearer ${adminToken}`)
+      .send({ statusUpdate: "READY FOR PICK-UP" });
+    expect(statusUpdateOrderOneRes.status).toEqual(200);
+    const res = await requestWithSupertest
+      .post("/checkout/2")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({
+        orderId: orderIdOne,
+        amount: 18.96,
+        paymentMethod: "Credit Card",
+      });
+    expect(res.status).toEqual(400);
+    expect(res.type).toEqual(expect.stringContaining("json"));
+    expect(res.body.error).toEqual("Order is not eligible for checkout.");
+    const deleteOrderOneRes = await requestWithSupertest
+      .delete(`/orders/admin/${orderIdOne}`)
+      .set("Authorization", `Bearer ${adminToken}`);
+    expect(deleteOrderOneRes.status).toEqual(200);
+  });
+
+  it("POST /checkout/2 should fail to checkout and mark an order as paid because the checkout amount sent over does not match the order total", async () => {
+    const productOneAdditionRes = await requestWithSupertest
+      .post("/carts/2")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({ productId: 1, quantity: 1 });
+    expect(productOneAdditionRes.status).toEqual(201);
+    const productTwoAdditionRes = await requestWithSupertest
+      .post("/carts/2")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({ productId: 5, quantity: 3 });
+    expect(productTwoAdditionRes.status).toEqual(201);
+    const createOrderOneRes = await requestWithSupertest
+      .post("/orders/2")
+      .set("Authorization", `Bearer ${userToken}`);
+    orderIdTwo = createOrderOneRes.body.order_id;
+    expect(createOrderOneRes.status).toEqual(201);
+    const res = await requestWithSupertest
+      .post("/checkout/2")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({
+        orderId: orderIdTwo,
+        amount: 9.96,
+        paymentMethod: "Credit Card",
+      });
+    expect(res.status).toEqual(400);
+    expect(res.type).toEqual(expect.stringContaining("json"));
+    expect(res.body.error).toEqual("Payment does not match order total.");
+    const deleteOrderOneRes = await requestWithSupertest
+      .delete(`/orders/admin/${orderIdTwo}`)
+      .set("Authorization", `Bearer ${adminToken}`);
+    expect(deleteOrderOneRes.status).toEqual(200);
+  });
+
+  it("POST /checkout/2 should ", async () => {
+    const productOneAdditionRes = await requestWithSupertest
+      .post("/carts/2")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({ productId: 1, quantity: 1 });
+    expect(productOneAdditionRes.status).toEqual(201);
+    const productTwoAdditionRes = await requestWithSupertest
+      .post("/carts/2")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({ productId: 5, quantity: 3 });
+    expect(productTwoAdditionRes.status).toEqual(201);
+    const createOrderOneRes = await requestWithSupertest
+      .post("/orders/2")
+      .set("Authorization", `Bearer ${userToken}`);
+    orderIdThree = createOrderOneRes.body.order_id;
+    orderThreeTotal = createOrderOneRes.body.total_price;
+    expect(createOrderOneRes.status).toEqual(201);
+    const res = await requestWithSupertest
+      .post("/checkout/2")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({
+        orderId: orderIdThree,
+        amount: orderThreeTotal,
+        paymentMethod: "Credit Card",
+      });
+    expect(res.status).toEqual(200);
+    expect(res.type).toEqual(expect.stringContaining("json"));
+    expect(res.body.message).toEqual(
+      "Payment successful. Order status updated to PAID."
+    );
+    // Will have this commented out for now. Testing and end point works. Order matches payment
+    //   const deleteOrderOneRes = await requestWithSupertest
+    //     .delete(`/orders/admin/${orderIdThree}`)
+    //     .set("Authorization", `Bearer ${adminToken}`);
+    //   expect(deleteOrderOneRes.status).toEqual(200);
   });
 });
 

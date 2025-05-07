@@ -19,7 +19,7 @@ export const finalizeOrder = async (req, res) => {
     if (isNaN(amount)) {
       await client.query("ROLLBACK");
       return res.status(400).json({
-        error: "Bad request. Invalid order id. Amount must be a number.",
+        error: "Bad request. Invalid order amount. Amount must be a number.",
       });
     }
     const { paymentMethod } = req.body;
@@ -57,8 +57,8 @@ export const finalizeOrder = async (req, res) => {
     }
     // 5. Insert into payments table
     const paymentResult = await client.query(
-      "INSERT INTO payment (order_id, payment_method, status) VALUES ($1, $2, $3) RETURNING *",
-      [orderId, paymentMethod, "PAID"]
+      "INSERT INTO payments (order_id, payment_method, status) VALUES ($1, $2, $3) RETURNING *",
+      [orderId, paymentMethod, "completed"]
     );
     // 6. Update the order's status
     await client.query(
