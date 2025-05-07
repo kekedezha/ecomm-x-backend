@@ -1,7 +1,30 @@
 import app from "../../../src/index";
 import supertest from "supertest";
+import pool from "../../../src/db";
+import "dotenv/config";
 
 const requestWithSupertest = supertest(app);
+let adminLogin;
+let adminToken;
+let userLogin;
+let userToken;
+let orderIdOne;
+let orderIdTwo;
+
+beforeAll(async () => {
+  // Login with admin role to use throughout admin/protected routes
+  adminLogin = await requestWithSupertest.post("/users/login").send({
+    email: "dezha6@hotmail.com",
+    password: process.env.ADMIN_PASSWORD,
+  });
+  adminToken = adminLogin.body.token;
+
+  // Login with user role to use throughout protected routes
+  userLogin = await requestWithSupertest
+    .post("/users/login")
+    .send({ email: "yuki@gmail.com", password: process.env.YUKI_PASSWORD });
+  userToken = userLogin.body.token;
+});
 
 describe.skip("Payments endpoints", () => {
   it("GET /payments should show all payments from db", async () => {
@@ -39,4 +62,9 @@ describe.skip("Payments endpoints", () => {
       "DELETE HTTP method on payments resource for payments/:3"
     );
   });
+});
+
+// Ensure db connection pool closes after all the tests to ensure proper teardown and prevent data leaks
+afterAll(async () => {
+  await pool.end(); // close db connection
 });
