@@ -36,10 +36,11 @@ export const finalizeOrder = async (req, res) => {
       [orderId, req.user.id]
     );
 
-    if (orderResult.rows.length == 0) {
+    if (orderResult.rows.length === 0) {
       await client.query("ROLLBACK");
       return res.status(404).json({ error: "Order id not found." });
     }
+
     // 3. Check that the order is in a 'pending' status
     const order = orderResult.rows[0];
     if (order.status !== "PENDING") {
@@ -48,6 +49,7 @@ export const finalizeOrder = async (req, res) => {
         .status(400)
         .json({ error: "Order is not eligible for checkout." });
     }
+
     // 4. Optionally validate that the total matches
     if (parseFloat(order.total_price) !== amount) {
       await client.query("ROLLBACK");
@@ -55,17 +57,56 @@ export const finalizeOrder = async (req, res) => {
         .status(400)
         .json({ error: "Payment does not match order total." });
     }
-    // 5. Insert into payments table
+
+    // 5. Check product inventory
+    const orderItemResults = await client.query(
+      "SELECT product_id, quantity FROM order_items WHERE order_id = $1",
+      [orderId]
+    );
+
+    const orderItems = orderItemResults.rows;
+
+    for (const item of orderItems) {
+      const { product_id, quantity } = item;
+      console.log(product_id);
+      console.log(quantity);
+      const productResult = await client.query(
+        "SELECT stock FROM products WHERE id = $1",
+        [product_id]
+      );
+      const stock = productResult.rows[0]?.stock;
+      console.log("Stock: ", stock);
+      console.log("Quantity: ", quantity);
+
+      if (stock === undefined || stock < quantity) {
+        await client.query("ROLLBACK");
+        return res.status(400).json({
+          error: `Insufficient inventory for products.`,
+        });
+      }
+    }
+
+    // 6. Deduct inventory
+    for (const item in orderItems) {
+      await client.query(
+        "UPDATE products SET stock = stock - $1 WHERE id = $2",
+        [item.quantity, item.product_id]
+      );
+    }
+
+    // 6. Insert into payments table
     const paymentResult = await client.query(
       "INSERT INTO payments (order_id, payment_method, status) VALUES ($1, $2, $3) RETURNING *",
       [orderId, paymentMethod, "completed"]
     );
-    // 6. Update the order's status
+
+    // 7. Update the order's status
     await client.query(
       "UPDATE orders SET status = 'PAID' WHERE id = $1 and user_id = $2",
       [orderId, req.user.id]
     );
-    //7. Complete transaction
+
+    //8. Complete transaction
     await client.query("COMMIT");
     res.status(200).json({
       message: "Payment successful. Order status updated to PAID.",

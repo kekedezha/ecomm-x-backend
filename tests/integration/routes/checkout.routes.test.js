@@ -8,10 +8,6 @@ let adminLogin;
 let adminToken;
 let userLogin;
 let userToken;
-let orderIdOne;
-let orderIdTwo;
-let orderIdThree;
-let orderThreeTotal;
 
 beforeAll(async () => {
   // Login with admin role to use throughout admin/protected routes
@@ -104,7 +100,7 @@ describe("Checkout endpoints", () => {
     const createOrderOneRes = await requestWithSupertest
       .post("/orders/2")
       .set("Authorization", `Bearer ${userToken}`);
-    orderIdOne = createOrderOneRes.body.order_id;
+    const orderIdOne = createOrderOneRes.body.order_id;
     expect(createOrderOneRes.status).toEqual(201);
     const statusUpdateOrderOneRes = await requestWithSupertest
       .put(`/orders/admin/2/${orderIdOne}`)
@@ -139,11 +135,11 @@ describe("Checkout endpoints", () => {
       .set("Authorization", `Bearer ${userToken}`)
       .send({ productId: 5, quantity: 3 });
     expect(productTwoAdditionRes.status).toEqual(201);
-    const createOrderOneRes = await requestWithSupertest
+    const createOrderTwoRes = await requestWithSupertest
       .post("/orders/2")
       .set("Authorization", `Bearer ${userToken}`);
-    orderIdTwo = createOrderOneRes.body.order_id;
-    expect(createOrderOneRes.status).toEqual(201);
+    const orderIdTwo = createOrderTwoRes.body.order_id;
+    expect(createOrderTwoRes.status).toEqual(201);
     const res = await requestWithSupertest
       .post("/checkout/2")
       .set("Authorization", `Bearer ${userToken}`)
@@ -161,7 +157,41 @@ describe("Checkout endpoints", () => {
     expect(deleteOrderOneRes.status).toEqual(200);
   });
 
-  it("POST /checkout/2 should ", async () => {
+  it("POST /checkout/2 should fail to checkout and mark an order as paid because the user is trying to purchase a product more that what is available", async () => {
+    const productOneAdditionRes = await requestWithSupertest
+      .post("/carts/2")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({ productId: 1, quantity: 1 });
+    expect(productOneAdditionRes.status).toEqual(201);
+    const productTwoAdditionRes = await requestWithSupertest
+      .post("/carts/2")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({ productId: 5, quantity: 100 });
+    expect(productTwoAdditionRes.status).toEqual(201);
+    const createOrderThreeRes = await requestWithSupertest
+      .post("/orders/2")
+      .set("Authorization", `Bearer ${userToken}`);
+    const orderIdThree = createOrderThreeRes.body.order_id;
+    const orderThreeTotal = createOrderThreeRes.body.total_price;
+    expect(createOrderThreeRes.status).toEqual(201);
+    const res = await requestWithSupertest
+      .post("/checkout/2")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({
+        orderId: orderIdThree,
+        amount: orderThreeTotal,
+        paymentMethod: "Credit Card",
+      });
+    expect(res.status).toEqual(400);
+    expect(res.type).toEqual(expect.stringContaining("json"));
+    expect(res.body.error).toEqual("Insufficient inventory for products.");
+    const deleteOrderOneRes = await requestWithSupertest
+      .delete(`/orders/admin/${orderIdThree}`)
+      .set("Authorization", `Bearer ${adminToken}`);
+    expect(deleteOrderOneRes.status).toEqual(200);
+  });
+
+  it("POST /checkout/2 should checkout an order and mark it as paid", async () => {
     const productOneAdditionRes = await requestWithSupertest
       .post("/carts/2")
       .set("Authorization", `Bearer ${userToken}`)
@@ -172,20 +202,21 @@ describe("Checkout endpoints", () => {
       .set("Authorization", `Bearer ${userToken}`)
       .send({ productId: 5, quantity: 3 });
     expect(productTwoAdditionRes.status).toEqual(201);
-    const createOrderOneRes = await requestWithSupertest
+    const createOrderFourRes = await requestWithSupertest
       .post("/orders/2")
       .set("Authorization", `Bearer ${userToken}`);
-    orderIdThree = createOrderOneRes.body.order_id;
-    orderThreeTotal = createOrderOneRes.body.total_price;
-    expect(createOrderOneRes.status).toEqual(201);
+    const orderIdFour = createOrderFourRes.body.order_id;
+    const orderFourTotal = createOrderFourRes.body.total_price;
+    expect(createOrderFourRes.status).toEqual(201);
     const res = await requestWithSupertest
       .post("/checkout/2")
       .set("Authorization", `Bearer ${userToken}`)
       .send({
-        orderId: orderIdThree,
-        amount: orderThreeTotal,
+        orderId: orderIdFour,
+        amount: orderFourTotal,
         paymentMethod: "Credit Card",
       });
+    console.log(res.body.error);
     expect(res.status).toEqual(200);
     expect(res.type).toEqual(expect.stringContaining("json"));
     expect(res.body.message).toEqual(
@@ -193,7 +224,7 @@ describe("Checkout endpoints", () => {
     );
     // Will have this commented out for now. Testing and end point works. Order matches payment
     //   const deleteOrderOneRes = await requestWithSupertest
-    //     .delete(`/orders/admin/${orderIdThree}`)
+    //     .delete(`/orders/admin/${orderIdFour}`)
     //     .set("Authorization", `Bearer ${adminToken}`);
     //   expect(deleteOrderOneRes.status).toEqual(200);
   });
