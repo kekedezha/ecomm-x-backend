@@ -216,7 +216,6 @@ describe("Checkout endpoints", () => {
         amount: orderFourTotal,
         paymentMethod: "Credit Card",
       });
-    console.log(res.body.error);
     expect(res.status).toEqual(200);
     expect(res.type).toEqual(expect.stringContaining("json"));
     expect(res.body.message).toEqual(

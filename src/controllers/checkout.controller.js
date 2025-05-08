@@ -68,15 +68,11 @@ export const finalizeOrder = async (req, res) => {
 
     for (const item of orderItems) {
       const { product_id, quantity } = item;
-      console.log(product_id);
-      console.log(quantity);
       const productResult = await client.query(
         "SELECT stock FROM products WHERE id = $1",
         [product_id]
       );
       const stock = productResult.rows[0]?.stock;
-      console.log("Stock: ", stock);
-      console.log("Quantity: ", quantity);
 
       if (stock === undefined || stock < quantity) {
         await client.query("ROLLBACK");
@@ -87,7 +83,7 @@ export const finalizeOrder = async (req, res) => {
     }
 
     // 6. Deduct inventory
-    for (const item in orderItems) {
+    for (const item of orderItems) {
       await client.query(
         "UPDATE products SET stock = stock - $1 WHERE id = $2",
         [item.quantity, item.product_id]
