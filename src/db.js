@@ -1,9 +1,10 @@
 import { Pool } from "pg";
+import "dotenv/config"; // Initialize .env variables from .env file
 
 const pool = new Pool({
-  user: "christiandezha",
+  user: process.env.USER,
   host: "localhost",
-  database: "ecomm_x",
+  database: process.env.PGDATABASE,
   port: "5432",
 });
 
