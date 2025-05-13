@@ -1,4 +1,4 @@
-import pool from "../db";
+import pool from "../config/db";
 import { isProductInCart } from "../helpers/carts.helper";
 
 // GET function to retrieve current cart for user

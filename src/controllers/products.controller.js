@@ -1,4 +1,4 @@
-import pool from "../db";
+import pool from "../config/db";
 
 // GET all products
 export const getAllProducts = async (req, res) => {

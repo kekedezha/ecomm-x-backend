@@ -1,4 +1,4 @@
-import pool from "../db";
+import pool from "../config/db";
 import { doesOrderExistForUser } from "../helpers/orders.helper";
 
 // GET function for retrieving all orders for all users -- ADMIN ONLY

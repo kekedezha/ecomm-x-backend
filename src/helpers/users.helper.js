@@ -2,7 +2,7 @@
 import bcrypt from "bcrypt";
 import "dotenv/config";
 import jwt from "jsonwebtoken";
-import pool from "../db";
+import pool from "../config/db";
 
 // function used to hash a new user's password to be stored in the db
 export const hashPassword = async (unhashedPassword) => {

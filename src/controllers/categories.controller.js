@@ -1,4 +1,4 @@
-import pool from "../db";
+import pool from "../config/db";
 
 // GET function to list all categories
 export const getAllCategories = async (req, res) => {

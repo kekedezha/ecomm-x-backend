@@ -1,4 +1,4 @@
-import pool from "../db";
+import pool from "../config/db";
 
 // Function to check if the order_id exists for the user requesting it
 export const doesOrderExistForUser = async (userId, orderId) => {

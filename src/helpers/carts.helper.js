@@ -1,4 +1,4 @@
-import pool from "../db";
+import pool from "../config/db";
 
 // function to check if a cart has the product
 export const isProductInCart = async (cartId, productId) => {

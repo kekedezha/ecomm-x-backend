@@ -1,5 +1,5 @@
 // Import 'Router class from the express module to create modular route handlers
-import pool from "../db";
+import pool from "../config/db";
 import {
   hashPassword,
   comparePassword,
