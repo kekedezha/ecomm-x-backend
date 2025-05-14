@@ -29,7 +29,7 @@ describe("Checkout endpoints", () => {
     const res = await requestWithSupertest.post("/checkout/2");
     expect(res.status).toEqual(401);
     expect(res.type).toEqual(expect.stringContaining("json"));
-    expect(res.body.error).toEqual("User is unauthorized.");
+    expect(res.body.error).toEqual("Invalid token.");
   });
 
   it("POST /checkout/3 should fail to checkout and mark an order as paid because the user id does not match the user id of the logged in user", async () => {
