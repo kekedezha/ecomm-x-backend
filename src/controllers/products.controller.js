@@ -3,7 +3,9 @@ import pool from "../config/db";
 // GET all products
 export const getAllProducts = async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM products");
+    const result = await pool.query(
+      "SELECT id, name, description, price, stock, category_id FROM products"
+    );
     res.json(result.rows);
   } catch (error) {
     console.error("Error fetching products: ", error);

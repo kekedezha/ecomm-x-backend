@@ -41,7 +41,6 @@ describe("Products endpoints", () => {
             price: expect.any(String),
             stock: expect.any(Number),
             category_id: expect.any(Number),
-            created_at: expect.any(String),
           }),
         ])
       );
