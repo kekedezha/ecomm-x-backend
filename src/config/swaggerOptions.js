@@ -21,6 +21,17 @@ export const swaggerOptions = {
         },
       },
       parameters: {
+        UserIdParam: {
+          name: "userId",
+          in: "path",
+          description: "The ID of the user",
+          required: true,
+          schema: {
+            type: "integer",
+            minimum: 0,
+            example: 5,
+          },
+        },
         ProductIdParam: {
           name: "productId",
           in: "path",
@@ -34,6 +45,19 @@ export const swaggerOptions = {
         },
       },
       schemas: {
+        CheckoutOrder: {
+          type: "object",
+          properties: {
+            orderId: { type: "integer", required: true },
+            amount: { type: "number", required: true },
+            paymentMethod: { type: "string", required: true },
+          },
+          example: {
+            orderId: 99,
+            amount: 29.48,
+            paymentMethod: "CREDIT CARD",
+          },
+        },
         Product: {
           type: "object",
           properties: {
@@ -56,11 +80,11 @@ export const swaggerOptions = {
         NewProduct: {
           type: "object",
           properties: {
-            name: { type: "string" },
-            description: { type: "string" },
-            price: { type: "number" },
-            stock: { type: "integer" },
-            category_id: { type: "integer" },
+            name: { type: "string", required: true },
+            description: { type: "string", required: true },
+            price: { type: "number", required: true },
+            stock: { type: "integer", required: true },
+            category_id: { type: "integer", required: true },
           },
           example: {
             name: "Baguette",
