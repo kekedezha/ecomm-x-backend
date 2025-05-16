@@ -196,8 +196,8 @@ router.post(
  *      403:
  *        description: >
  *          Unauthorized. Possible reasons:
- *          - The user has send over an invalid token.
- *          - The user is trying to access a admin path and does not have admin privileges.
+ *            - The user has send over an invalid token.
+ *            - The user is trying to access a admin path and does not have admin privileges.
  *        content:
  *          application/json:
  *            schema:
