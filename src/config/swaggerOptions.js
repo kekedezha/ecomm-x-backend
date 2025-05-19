@@ -45,6 +45,111 @@ export const swaggerOptions = {
         },
       },
       schemas: {
+        CartItem: {
+          type: "object",
+          properties: {
+            id: { type: "integer" },
+            cart_id: { type: "integer" },
+            product_id: { type: "integer" },
+            quantity: { type: "integer" },
+          },
+          example: {
+            id: 99,
+            cart_id: 45,
+            product_id: 3,
+            quantity: 6,
+          },
+        },
+        CartItems: {
+          type: "array",
+          items: {
+            $ref: "#/components/schemas/CartItem",
+          },
+          example: [
+            {
+              id: 101,
+              cart_id: 88,
+              product_id: 3,
+              quantity: 1,
+            },
+            {
+              id: 102,
+              cart_id: 88,
+              product_id: 4,
+              quantity: 3,
+            },
+            {
+              id: 103,
+              cart_id: 88,
+              product_id: 7,
+              quantity: 2,
+            },
+          ],
+        },
+        ClearCart: {
+          type: "object",
+          properties: {
+            message: { type: "string" },
+            deletedProducts: { type: "array" },
+          },
+          example: {
+            message: "Successfully deleted all products from cart.",
+            deletedProducts: [
+              { id: 367, cart_id: 2, product_id: 6, quantity: 2 },
+              { id: 366, cart_id: 2, product_id: 5, quantity: 3 },
+            ],
+          },
+        },
+        DeletedItemFromCart: {
+          type: "object",
+          properties: {
+            message: { type: "string" },
+            deletedProduct: { type: "object" },
+          },
+          example: {
+            message: "Successfully deleted product from cart.",
+            deletedProduct: { id: 367, cart_id: 2, product_id: 6, quantity: 2 },
+          },
+        },
+        UpdatedCart: {
+          type: "object",
+          properties: {
+            message: { type: "string" },
+            updatedProduct: { type: "object" },
+          },
+          example: {
+            message: "Successfully updated quantity of product.",
+            updatedProduct: { id: 367, cart_id: 2, product_id: 6, quantity: 2 },
+          },
+        },
+        NewCartItem: {
+          type: "object",
+          properties: {
+            productId: { type: "integer" },
+            quantity: { type: "integer" },
+          },
+          example: {
+            productId: 3,
+            quantity: 2,
+          },
+        },
+        NewCartItemsResponse: {
+          type: "object",
+          properties: {
+            message: { type: "string" },
+            addedProduct: { type: "object" },
+          },
+          example: {
+            message:
+              "'Successfully added new product to cart.' OR 'Successfully added product to cart.'",
+            addedProduct: {
+              id: 101,
+              cart_id: 88,
+              product_id: 3,
+              quantity: 1,
+            },
+          },
+        },
         CheckoutOrder: {
           type: "object",
           properties: {
@@ -97,22 +202,20 @@ export const swaggerOptions = {
         CreatedProduct: {
           type: "object",
           properties: {
-            id: { type: "integer" },
-            name: { type: "string" },
-            description: { type: "string" },
-            price: { type: "number" },
-            stock: { type: "integer" },
-            category_id: { type: "integer" },
-            created_at: { type: "string" },
+            message: { type: "string" },
+            product: { type: "object" },
           },
           example: {
-            id: 1,
-            name: "Donut",
-            description: "Fried dough with icing and toppings.",
-            price: 2.99,
-            stock: 50,
-            category_id: 2,
-            created_at: "2025-03-27 11:12:51.008486",
+            message: "Successfully created new product!",
+            product: {
+              id: 1,
+              name: "Donut",
+              description: "Fried dough with icing and toppings.",
+              price: 2.99,
+              stock: 50,
+              category_id: 2,
+              created_at: "2025-03-27 11:12:51.008486",
+            },
           },
         },
         UpdatedProduct: {

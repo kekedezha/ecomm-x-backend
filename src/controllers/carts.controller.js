@@ -59,7 +59,7 @@ export const updateProductQty = async (req, res) => {
     const quantity = parseInt(req.body.quantity, 10);
     if (isNaN(productId)) {
       return res
-        .status(404)
+        .status(400)
         .json({ error: "Bad Request. Not a valid product." });
     }
     const result = await pool.query(
@@ -86,7 +86,7 @@ export const deleteProdFromCart = async (req, res) => {
     const productId = parseInt(req.params.productId, 10);
     if (isNaN(productId)) {
       return res
-        .status(404)
+        .status(400)
         .json({ error: "Bad Request. Not a valid product." });
     }
     const result = await pool.query(
