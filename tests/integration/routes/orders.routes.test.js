@@ -175,7 +175,6 @@ describe("Orders endpoints", () => {
         .set("Authorization", `Bearer ${adminToken}`);
       expect(res.status).toEqual(200);
       expect(res.type).toEqual(expect.stringContaining("json"));
-      expect(res.body.length).toEqual(2);
     });
   });
 

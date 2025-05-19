@@ -159,7 +159,7 @@ describe("Carts endpoints", () => {
         .put("/carts/2/butter")
         .set("Authorization", `Bearer ${userToken}`)
         .send({ quantity: 3 });
-      expect(res.status).toEqual(404);
+      expect(res.status).toEqual(400);
       expect(res.type).toEqual(expect.stringContaining("json"));
       expect(res.body.error).toEqual("Bad Request. Not a valid product.");
     });
@@ -198,7 +198,7 @@ describe("Carts endpoints", () => {
       const res = await requestWithSupertest
         .delete("/carts/2/flour")
         .set("Authorization", `Bearer ${userToken}`);
-      expect(res.status).toEqual(404);
+      expect(res.status).toEqual(400);
       expect(res.type).toEqual(expect.stringContaining("json"));
       expect(res.body.error).toEqual("Bad Request. Not a valid product.");
     });
