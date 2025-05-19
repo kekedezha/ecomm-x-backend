@@ -20,19 +20,22 @@ export const getUsersCurrentCart = async (req, res) => {
 export const addProductToCart = async (req, res) => {
   try {
     const cartId = parseInt(req.user.cart_id, 10);
-    const productExistsInCart = await isProductInCart(cartId, req.productId);
+    const productExistsInCart = await isProductInCart(
+      cartId,
+      req.body.productId
+    );
 
     if (!productExistsInCart) {
       const result = await pool.query(
         "INSERT INTO cart_items (cart_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *",
-        [cartId, req.productId, req.quantity]
+        [cartId, req.body.productId, req.body.quantity]
       );
       res.status(201).json({
         message: "Successfully added new product to cart.",
         addedProduct: result.rows[0],
       });
     } else {
-      const newQuantity = req.quantity + productExistsInCart;
+      const newQuantity = req.body.quantity + productExistsInCart;
       const result = await pool.query(
         "UPDATE cart_items SET quantity = $1 WHERE cart_id = $2 AND product_id = $3 RETURNING *",
         [newQuantity, cartId, req.productId]
