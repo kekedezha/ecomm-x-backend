@@ -119,7 +119,7 @@ export const clearCart = async (req, res) => {
     }
     res.status(200).json({
       message: "Successfully deleted all products from cart.",
-      deletedProducts: result.rows[0],
+      deletedProducts: result.rows,
     });
   } catch (error) {
     console.log("Error clearing cart: ", error);
