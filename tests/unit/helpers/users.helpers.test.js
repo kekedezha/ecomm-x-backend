@@ -2,8 +2,6 @@ import {
   hashPassword,
   comparePassword,
   generateJWT,
-  createUserCart,
-  checkIfCartExists,
 } from "../../../src/helpers/users.helper";
 
 describe("hashPassword function to appropriately hash a password input", () => {
