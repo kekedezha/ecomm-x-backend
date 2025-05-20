@@ -18,6 +18,19 @@ const router = Router();
  *  get:
  *    summary: Get all categories
  *    tags: [Categories]
+ *    responses:
+ *      200:
+ *        description: A list of categories
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/AllCategories'
+ *      500:
+ *        description: Internal Server Error
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/InternalServerError'
  *
  */
 router.get("/", getAllCategories);
@@ -28,6 +41,15 @@ router.get("/", getAllCategories);
  *  get:
  *    summary: Get all products by category id
  *    tags: [Categories]
+ *    parameters:
+ *      - $ref: '#/components/parameters/CategoryIdParam'
+ *    responses:
+ *      500:
+ *        description: Internal Server Error
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/InternalServerError'
  *
  */
 router.get("/:categoryId/products", getProdsByCategory);
@@ -40,6 +62,13 @@ router.get("/:categoryId/products", getProdsByCategory);
  *    tags: [Categories]
  *    security:
  *      - bearerAuth: []
+ *    responses:
+ *      500:
+ *        description: Internal Server Error
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/InternalServerError'
  *
  */
 router.post(
@@ -57,6 +86,15 @@ router.post(
  *    tags: [Categories]
  *    security:
  *      - bearerAuth: []
+ *    parameters:
+ *      - $ref: '#/components/parameters/CategoryIdParam'
+ *    responses:
+ *      500:
+ *        description: Internal Server Error
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/InternalServerError'
  */
 router.put(
   "/admin/:categoryId",
@@ -73,6 +111,15 @@ router.put(
  *    tags: [Categories]
  *    security:
  *      - bearerAuth: []
+ *    parameters:
+ *      - $ref: '#/components/parameters/CategoryIdParam'
+ *    responses:
+ *      500:
+ *        description: Internal Server Error
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/InternalServerError'
  *
  */
 router.delete(
