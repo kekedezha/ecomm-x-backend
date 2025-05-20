@@ -12,13 +12,36 @@ import { authenticateToken, authorizeRoles } from "../middleware/auth";
 // Initialize a router instance to use with 'categories' routes
 const router = Router();
 
-// GET HTTP route for retrieving all of the categories from the db
+/**
+ * @swagger
+ * /categories:
+ *  get:
+ *    summary: Get all categories
+ *    tags: [Categories]
+ *
+ */
 router.get("/", getAllCategories);
 
-// GET HTTP route for getting a single category from the db
+/**
+ * @swagger
+ * /categories/{categoryId}/products:
+ *  get:
+ *    summary: Get all products by category id
+ *    tags: [Categories]
+ *
+ */
 router.get("/:categoryId/products", getProdsByCategory);
 
-// POST HTTP route for creating a new category -- ADMIN ONLY
+/**
+ * @swagger
+ * /categories/admin:
+ *  post:
+ *    summary: Add new category to db -- ADMIN ONLY
+ *    tags: [Categories]
+ *    security:
+ *      - bearerAuth: []
+ *
+ */
 router.post(
   "/admin",
   authenticateToken,
@@ -26,7 +49,15 @@ router.post(
   createNewCategory
 );
 
-// PUT HTTP route for updating a category -- ADMIN ONLY
+/**
+ * @swagger
+ * /categories/admin/{categoryId}/:
+ *  put:
+ *    summary: Update category by category id -- ADMIN ONLY
+ *    tags: [Categories]
+ *    security:
+ *      - bearerAuth: []
+ */
 router.put(
   "/admin/:categoryId",
   authenticateToken,
@@ -34,7 +65,16 @@ router.put(
   updateCategory
 );
 
-// DELETE HTTP route for deleting a category -- ADMIN ONLY
+/**
+ * @swagger
+ * /categories/admin/{categoryId}/:
+ *  delete:
+ *    summary: Delete category by category id -- ADMIN ONLY
+ *    tags: [Categories]
+ *    security:
+ *      - bearerAuth: []
+ *
+ */
 router.delete(
   "/admin/:categoryId",
   authenticateToken,
