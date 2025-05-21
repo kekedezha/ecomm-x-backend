@@ -43,6 +43,17 @@ export const swaggerOptions = {
             example: 3,
           },
         },
+        CategoryIdParam: {
+          name: "categoryId",
+          in: "path",
+          description: "The ID of the category",
+          required: true,
+          schema: {
+            type: "integer",
+            minimum: 0,
+            example: 2,
+          },
+        },
       },
       schemas: {
         CartItem: {
@@ -162,6 +173,65 @@ export const swaggerOptions = {
             amount: 29.48,
             paymentMethod: "CREDIT CARD",
           },
+        },
+        Category: {
+          type: "object",
+          properties: {
+            id: { type: "integer" },
+            name: { type: "string" },
+          },
+          example: {
+            id: 1,
+            name: "Bread",
+          },
+        },
+        GetProdsByCategory: {
+          type: "object",
+          properties: {
+            message: { type: "string" },
+            products: { type: "array" },
+          },
+          example: [
+            {
+              name: "Sourdough Loaf",
+              description:
+                "Naturally leavened bread made with a fermented starter containing wild yeast and bacteria, resulting in a tangy flavor and chewy texture.",
+              price: "5.99",
+              stock: 50,
+              category_id: 1,
+            },
+            {
+              name: "Baguette",
+              description: "Long, thin type of bread of French origin.",
+              price: "6.99",
+              stock: 46,
+              category_id: 1,
+            },
+          ],
+        },
+        AllCategories: {
+          type: "array",
+          items: {
+            $ref: "#/components/schemas/Category",
+          },
+          example: [
+            {
+              id: 1,
+              name: "Bread",
+            },
+            {
+              id: 2,
+              name: "Cookie",
+            },
+            {
+              id: 3,
+              name: "Pastry",
+            },
+            {
+              id: 4,
+              name: "Tart",
+            },
+          ],
         },
         Product: {
           type: "object",

@@ -44,6 +44,36 @@ router.get("/", getAllCategories);
  *    parameters:
  *      - $ref: '#/components/parameters/CategoryIdParam'
  *    responses:
+ *      200:
+ *        description: Successfully retrieved products
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/GetProdsByCategory'
+ *      400:
+ *        description: Bad request. Invalid category id.
+ *        content:
+ *          application/json:
+ *            schema:
+ *            type: object
+ *            properties:
+ *              error:
+ *                type: string
+ *                description: The error message
+ *            example:
+ *              error: Bad Request. Invalid Category ID.
+ *      404:
+ *        description: Not found.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                error:
+ *                  type: string
+ *                  description: The error message.
+ *              example:
+ *                error: Category not found.
  *      500:
  *        description: Internal Server Error
  *        content:
