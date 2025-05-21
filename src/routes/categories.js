@@ -93,6 +93,39 @@ router.get("/:categoryId/products", getProdsByCategory);
  *    security:
  *      - bearerAuth: []
  *    responses:
+ *      201:
+ *        description: Successfully created new product
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/NewCategory'
+ *      400:
+ *        description: Bad request. Missing category name.
+ *        content:
+ *          application/json:
+ *            schema:
+ *            type: object
+ *            properties:
+ *              error:
+ *                type: string
+ *                description: The error message
+ *            example:
+ *              error: Bad Request. Missing category name.
+ *      401:
+ *         description: Missing token.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/MissingToken'
+ *      403:
+ *        description: >
+ *          Unauthorized. Possible reasons:
+ *           - The user has send over an invalid token.
+ *           - The user is trying to access a admin path and does not have admin privileges.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Unauthorized'
  *      500:
  *        description: Internal Server Error
  *        content:
@@ -119,6 +152,51 @@ router.post(
  *    parameters:
  *      - $ref: '#/components/parameters/CategoryIdParam'
  *    responses:
+ *      200:
+ *        description: Successfully updated product
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/UpdateCategory'
+ *      400:
+ *        description: >
+ *          Bad request. Possible reasons:
+ *            - Invalid category id
+ *            - Missing update
+ *        content:
+ *          application/json:
+ *            schema:
+ *            type: object
+ *            properties:
+ *              error:
+ *                type: string
+ *                description: The error message
+ *            example:
+ *              error: "'Bad Request. Invalid Category ID.' OR 'Bad Request. Missing update.'"
+ *      401:
+ *         description: Missing token.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/MissingToken'
+ *      403:
+ *        description: >
+ *          Unauthorized. Possible reasons:
+ *           - The user has send over an invalid token.
+ *           - The user is trying to access a admin path and does not have admin privileges.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Unauthorized'
+ *      404:
+ *        description: Not found.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              description: The error message
+ *            example:
+ *              error: Category not found.
  *      500:
  *        description: Internal Server Error
  *        content:
@@ -144,6 +222,45 @@ router.put(
  *    parameters:
  *      - $ref: '#/components/parameters/CategoryIdParam'
  *    responses:
+ *      200:
+ *        description: Successfully deleted product
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/UpdateCategory'
+ *      400:
+ *        description: Bad Request.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              description: The error message
+ *            example:
+ *              error: Bad Request. Invalid Category ID.
+ *      401:
+ *         description: Missing token.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/MissingToken'
+ *      403:
+ *        description: >
+ *          Unauthorized. Possible reasons:
+ *           - The user has send over an invalid token.
+ *           - The user is trying to access a admin path and does not have admin privileges.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Unauthorized'
+ *      404:
+ *        description: Not found.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              description: The error message
+ *            example:
+ *              error: Category not found.
  *      500:
  *        description: Internal Server Error
  *        content:

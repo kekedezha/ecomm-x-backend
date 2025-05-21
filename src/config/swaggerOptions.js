@@ -191,23 +191,68 @@ export const swaggerOptions = {
             message: { type: "string" },
             products: { type: "array" },
           },
-          example: [
-            {
-              name: "Sourdough Loaf",
-              description:
-                "Naturally leavened bread made with a fermented starter containing wild yeast and bacteria, resulting in a tangy flavor and chewy texture.",
-              price: "5.99",
-              stock: 50,
-              category_id: 1,
+          example: {
+            message: "Successfully retrieved products.",
+            products: [
+              {
+                name: "Sourdough Loaf",
+                description:
+                  "Naturally leavened bread made with a fermented starter containing wild yeast and bacteria, resulting in a tangy flavor and chewy texture.",
+                price: "5.99",
+                stock: 50,
+                category_id: 1,
+              },
+              {
+                name: "Baguette",
+                description: "Long, thin type of bread of French origin.",
+                price: "6.99",
+                stock: 46,
+                category_id: 1,
+              },
+            ],
+          },
+        },
+        UpdateCategory: {
+          type: "object",
+          properties: {
+            message: { type: "string" },
+            updatedCategory: { type: "object" },
+          },
+          example: {
+            message: "Successfully updated category name.",
+            updatedCategory: {
+              id: 1,
+              name: "Sweet Treat",
             },
-            {
-              name: "Baguette",
-              description: "Long, thin type of bread of French origin.",
-              price: "6.99",
-              stock: 46,
-              category_id: 1,
+          },
+        },
+        DeletedCategory: {
+          type: "object",
+          properties: {
+            message: { type: "string" },
+            updatedCategory: { type: "object" },
+          },
+          example: {
+            message: "Successfully deleted category.",
+            deletedCategory: {
+              id: 8,
+              name: "Sweet Treat",
             },
-          ],
+          },
+        },
+        NewCategory: {
+          type: "object",
+          properties: {
+            message: { type: "string" },
+            new_category: { type: "object" },
+          },
+          example: {
+            message: "Successfully created new category.",
+            new_category: {
+              id: 8,
+              name: "Sweet Treat",
+            },
+          },
         },
         AllCategories: {
           type: "array",
