@@ -183,7 +183,7 @@ describe("Users endpoints", () => {
         .set("Authorization", `Bearer ${newUserToken}`);
       expect(res.status).toEqual(200);
       expect(res.type).toEqual(expect.stringContaining("json"));
-      expect(res.body.message).toEqual("Successfully deleted product.");
+      expect(res.body.message).toEqual("Successfully deleted user.");
     });
 
     it("DELETE /users/999 should fail to delete a product not found in the database", async () => {
