@@ -222,7 +222,7 @@ router.post("/:userId", authenticateToken, isSameUser, createOrderFromCart);
  * @swagger
  * /orders/admin/{userId}/{orderId}:
  *  put:
- *    summary: Update the specified order for the specified user
+ *    summary: Update the specified order for the specified user -- ADMIN ONLY
  *    tags: [Orders]
  *    security:
  *      - bearerAuth: []
@@ -297,7 +297,7 @@ router.put(
  * @swagger
  * /orders/admin/{orderId}:
  *  delete:
- *    summary: Delete the specified order
+ *    summary: Delete the specified order -- ADMIN ONLY
  *    tags: [Orders]
  *    security:
  *      - bearerAuth: []
