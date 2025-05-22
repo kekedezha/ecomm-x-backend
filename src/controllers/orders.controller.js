@@ -30,9 +30,7 @@ export const getOrderForUser = async (req, res) => {
   try {
     const orderId = parseInt(req.params.orderId);
     if (isNaN(orderId)) {
-      return res
-        .status(400)
-        .json({ error: "Bad Request. Not a valid product." });
+      return res.status(400).json({ error: "Bad Request. Not a valid order." });
     }
     const doesOrderExist = await doesOrderExistForUser(req.user.id, orderId);
     if (!doesOrderExist) {
