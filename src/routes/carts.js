@@ -37,7 +37,7 @@ const router = Router();
  *            schema:
  *              type: object
  *              example:
- *                error: "'Invalid token.' OR 'User is not authorized to view user information that is not one's self.'"
+ *                error: "'Missing token.' OR 'User is not authorized to view user information that is not one's self.'"
  *      403:
  *        description: Invalid token.
  *        content:
@@ -85,7 +85,7 @@ router.get("/:userId", authenticateToken, isSameUser, getUsersCurrentCart);
  *            schema:
  *              type: object
  *              example:
- *                error: "'Invalid token.' OR 'User is not authorized to view user information that is not one's self.'"
+ *                error: "'Missing token.' OR 'User is not authorized to view user information that is not one's self.'"
  *      403:
  *        description: Invalid token.
  *        content:
@@ -160,7 +160,7 @@ router.post(
  *            schema:
  *              type: object
  *              example:
- *                error: "'Invalid token.' OR 'User is not authorized to view user information that is not one's self.'"
+ *                error: "'Missing token.' OR 'User is not authorized to view user information that is not one's self.'"
  *      403:
  *        description: Invalid token.
  *        content:
@@ -224,7 +224,7 @@ router.put(
  *            schema:
  *              type: object
  *              example:
- *                error: "'Invalid token.' OR 'User is not authorized to view user information that is not one's self.'"
+ *                error: "'Missing token.' OR 'User is not authorized to view user information that is not one's self.'"
  *      403:
  *        description: Invalid token.
  *        content:
@@ -279,7 +279,7 @@ router.delete(
  *            schema:
  *              type: object
  *              example:
- *                error: "'Invalid token.' OR 'User is not authorized to view user information that is not one's self.'"
+ *                error: "'Missing token.' OR 'User is not authorized to view user information that is not one's self.'"
  *      403:
  *        description: Invalid token.
  *        content:
