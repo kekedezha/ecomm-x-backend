@@ -29,7 +29,7 @@ export const swaggerOptions = {
           schema: {
             type: "integer",
             minimum: 0,
-            example: 5,
+            example: 2,
           },
         },
         ProductIdParam: {
@@ -52,6 +52,17 @@ export const swaggerOptions = {
             type: "integer",
             minimum: 0,
             example: 2,
+          },
+        },
+        OrderIdParam: {
+          name: "orderId",
+          in: "path",
+          description: "The ID of the order",
+          required: true,
+          schema: {
+            type: "integer",
+            minimum: 0,
+            example: 52,
           },
         },
       },
@@ -277,6 +288,115 @@ export const swaggerOptions = {
               name: "Tart",
             },
           ],
+        },
+        Order: {
+          type: "object",
+          properties: {
+            id: { type: "integer" },
+            user_id: { type: "integer" },
+            total_price: { type: "number" },
+            status: { type: "string" },
+            created_at: { type: "string" },
+          },
+          example: {
+            id: 52,
+            user_id: 2,
+            total_price: 18.96,
+            status: "PAID",
+            created_at: "2025-05-07 15:55:51.790103",
+          },
+        },
+        AllOrders: {
+          type: "array",
+          items: {
+            $ref: "#/components/schemas/Order",
+          },
+          example: [
+            {
+              id: 52,
+              user_id: 2,
+              total_price: 18.96,
+              status: "PAID",
+              created_at: "2025-05-07 15:55:51.790103",
+            },
+            {
+              id: 104,
+              user_id: 3,
+              total_price: 18.96,
+              status: "PAID",
+              created_at: "2025-05-08 10:57:59.61105",
+            },
+            {
+              id: 120,
+              user_id: 3,
+              total_price: 18.96,
+              status: "PAID",
+              created_at: "2025-05-19 18:12:03.413663",
+            },
+          ],
+        },
+        AllUserOrders: {
+          type: "array",
+          items: {
+            $ref: "#/components/schemas/Order",
+          },
+          example: [
+            {
+              id: 52,
+              user_id: 2,
+              total_price: 18.96,
+              status: "PAID",
+              created_at: "2025-05-07 15:55:51.790103",
+            },
+            {
+              id: 104,
+              user_id: 2,
+              total_price: 21.74,
+              status: "PAID",
+              created_at: "2025-05-08 10:57:59.61105",
+            },
+            {
+              id: 120,
+              user_id: 2,
+              total_price: 13.47,
+              status: "PAID",
+              created_at: "2025-05-21 18:12:03.413663",
+            },
+          ],
+        },
+        UpdatedOrder: {
+          type: "object",
+          properties: {
+            message: { type: "string" },
+            updatedOrder: { type: "object" },
+          },
+          example: {
+            message: "Successfully updated status of order.",
+            deletedOrder: {
+              id: 52,
+              user_id: 2,
+              total_price: 20.75,
+              status: "READY FOR PICK-UP",
+              created_at: "2025-05-08 10:57:59.61105",
+            },
+          },
+        },
+        DeletedOrder: {
+          type: "object",
+          properties: {
+            message: { type: "string" },
+            deletedOrder: { type: "object" },
+          },
+          example: {
+            message: "Successfully deleted order.",
+            deletedOrder: {
+              id: 403,
+              user_id: 2,
+              total_price: 20.75,
+              status: "PAID",
+              created_at: "2025-05-08 10:57:59.61105",
+            },
+          },
         },
         Product: {
           type: "object",
