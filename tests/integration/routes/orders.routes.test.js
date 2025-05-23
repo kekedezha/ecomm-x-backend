@@ -143,7 +143,7 @@ describe("Orders endpoints", () => {
       expect(res.status).toEqual(201);
     });
 
-    it("Add 3 blueberry danishes to the users cart", async () => {
+    it("Add 2 blueberry danishes to the users cart", async () => {
       const res = await requestWithSupertest
         .post("/carts/2")
         .set("Authorization", `Bearer ${userToken}`)
@@ -175,6 +175,30 @@ describe("Orders endpoints", () => {
         .set("Authorization", `Bearer ${adminToken}`);
       expect(res.status).toEqual(200);
       expect(res.type).toEqual(expect.stringContaining("json"));
+    });
+
+    it("GET /orders/2/(order1) should print out the items in the first order created above", async () => {
+      const res = await requestWithSupertest
+        .get(`/orders/2/${orderIdOne}`)
+        .set("Authorization", `Bearer ${userToken}`);
+      expect(res.status).toEqual(200);
+      expect(res.type).toEqual(expect.stringContaining("json"));
+      expect(res.body[0].product_id).toEqual(1);
+      expect(res.body[0].quantity).toEqual(1);
+      expect(res.body[1].product_id).toEqual(5);
+      expect(res.body[1].quantity).toEqual(3);
+    });
+
+    it("GET /orders/2/(order2) should print out the items in the first order created above", async () => {
+      const res = await requestWithSupertest
+        .get(`/orders/2/${orderIdTwo}`)
+        .set("Authorization", `Bearer ${userToken}`);
+      expect(res.status).toEqual(200);
+      expect(res.type).toEqual(expect.stringContaining("json"));
+      expect(res.body[0].product_id).toEqual(2);
+      expect(res.body[0].quantity).toEqual(1);
+      expect(res.body[1].product_id).toEqual(6);
+      expect(res.body[1].quantity).toEqual(2);
     });
   });
 
@@ -221,7 +245,6 @@ describe("Orders endpoints", () => {
         .put("/orders/admin/2/99999")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ statusUpdate: "PROCESSING" });
-      console.log(res.body.error);
       expect(res.status).toEqual(404);
       expect(res.type).toEqual(expect.stringContaining("json"));
       expect(res.body.error).toEqual("Order not found.");
