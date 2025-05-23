@@ -78,6 +78,14 @@ router.get("/:userId", authenticateToken, isSameUser, getUsersCurrentCart);
  *          application/json:
  *            schema:
  *              $ref: '#/components/schemas/NewCartItemsResponse'
+ *      400:
+ *        description: Bad Request.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              example:
+ *                error: Bad Request. No product id given.
  *      401:
  *        description: Missing token or user is trying to access an order that does not belong to them.
  *        content:
@@ -95,13 +103,13 @@ router.get("/:userId", authenticateToken, isSameUser, getUsersCurrentCart);
  *              example:
  *                error: Invalid token.
  *      404:
- *        description: Bad request. No product id given or product does not exist.
+ *        description: Not found.
  *        content:
  *          application/json:
  *            schema:
  *              type: object
  *              example:
- *                error: "'Bad Request. No product id given.' OR 'Product does not exist.'"
+ *                error: Product does not exist.
  *
  *      500:
  *        description: Internal Server Error

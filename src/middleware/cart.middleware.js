@@ -4,7 +4,7 @@ export const isValidProduct = async (req, res, next) => {
   try {
     if (!req.body.productId) {
       return res
-        .status(404)
+        .status(400)
         .json({ error: "Bad Request. No product id given." });
     }
     const productId = parseInt(req.body.productId);
