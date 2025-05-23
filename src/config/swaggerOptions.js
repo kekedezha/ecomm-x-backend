@@ -491,6 +491,190 @@ export const swaggerOptions = {
             },
           ],
         },
+        User: {
+          type: "object",
+          properties: {
+            id: { type: "integer" },
+            username: { type: "string" },
+            email: { type: "string" },
+            password: { type: "string" },
+            first_name: { type: "string" },
+            last_name: { type: "string" },
+            address: { type: "string" },
+            created_at: { type: "string" },
+          },
+          example: {
+            id: 2,
+            username: "billybob",
+            email: "billyb@gmail.com",
+            password:
+              "$2b$11$rHowWbwkyFdcl4hEGLvE3eAv5uFU9DlQ4EOywnbwG5D5kR7mHAdQW",
+            first_name: "Billy",
+            last_name: "Robert",
+            address: "Houston, TX",
+            created_at: "2025-04-08 11:13:10.319366",
+          },
+        },
+        NewUser: {
+          type: "object",
+          properties: {
+            username: { type: "string", required: true },
+            email: { type: "string", required: true },
+            password: { type: "string", required: true },
+            firstName: { type: "string", required: true },
+            lastName: { type: "string", required: true },
+            address: { type: "string", required: false },
+          },
+          example: {
+            username: "bbob",
+            email: "billyb@gmail.com",
+            password: "averyweakpassword",
+            firstName: "Billy",
+            lastName: "Bob",
+            address: "Miami, FL",
+          },
+        },
+        UserLogin: {
+          type: "object",
+          properties: {
+            username: { type: "string", required: false },
+            email: { type: "string", required: false },
+            password: { type: "string", required: true },
+          },
+          example: {
+            username: "bbob",
+            password: "averyweakpassword",
+          },
+        },
+        RegisteredUser: {
+          type: "object",
+          properties: {
+            message: { type: "string" },
+            user: { type: "object" },
+            token: { type: "string" },
+          },
+          example: {
+            message: "Successfully created new user!",
+            user: {
+              id: 2,
+              username: "bbob",
+              first_name: "Billy",
+            },
+            token:
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNzA4MzQ1MTIzLCJleHAiOjE3MDgzNTUxMjN9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+          },
+        },
+        AllUsers: {
+          type: "array",
+          items: {
+            $ref: "#/components/schemas/Product",
+          },
+          example: [
+            {
+              id: 2,
+              username: "billybob",
+              email: "billyb@gmail.com",
+              password:
+                "$2b$11$rHowWbwkyFdcl4hEGLvE3eAv5uFU9DlQ4EOywnbwG5D5kR7mHAdQW",
+              first_name: "Billy",
+              last_name: "Bob",
+              address: "Miami, FL",
+              created_at: "2025-04-08 11:13:10.319366",
+            },
+            {
+              id: 5,
+              username: "johndoe",
+              email: "jdoe@gmail.com",
+              password:
+                "$2b$11$rHoasdfwkyFdcl4hEGLvE3eAv5uFU9DlQ4EOywnbwG5D5kR7mHAdQW",
+              first_name: "John",
+              last_name: "Doe",
+              address: "Los Angeles, CA",
+              created_at: "2025-08-04 01:54:10.319366",
+            },
+            {
+              id: 6,
+              username: "sarraam",
+              email: "saram8@gmail.com",
+              password:
+                "$2b$11$rHowWbwkyFdcl4hEGLvE3eAv5uFU9Dasd8EOywnbwG5D5kR7mHAdQW",
+              first_name: "Sara",
+              last_name: "Miller",
+              address: "New York, NY",
+              created_at: "2025-06-12 09:17:10.319366",
+            },
+            {
+              id: 0,
+              username: "...",
+              email: "...",
+              password: "...",
+              first_name: "...",
+              last_name: "..",
+              address: "...",
+              created_at: "...",
+            },
+            {
+              id: 98,
+              username: "bruceyb",
+              email: "batman@gmail.com",
+              password:
+                "$2b$11$rHowWbwkyFdcl4hEGLvE3eAv5uFU9DlQ4asdf0wnbwG5D5kR7mHAdQW",
+              first_name: "Bruce",
+              last_name: "Wayne",
+              address: "Gotham, NY",
+              created_at: "2025-01-22 09:33:10.319366",
+            },
+          ],
+        },
+        UserUpdates: {
+          type: "object",
+          properties: {
+            username: { type: "string", required: false },
+            email: { type: "string", required: false },
+            password: { type: "string", required: false },
+            first_name: { type: "string", required: false },
+            last_name: { type: "string", required: false },
+            address: { type: "string", required: false },
+          },
+          example: {
+            last_name: "Robert",
+          },
+        },
+        UpdatedUser: {
+          type: "object",
+          example: {
+            id: 2,
+            username: "bbob",
+            email: "billyb@gmail.com",
+            password:
+              "$2b$11$rHowWbwkyFdcl4hEGLvE3eAv5uFU9DlQ4EOywnbwG5D5kR7mHAdQW",
+            first_name: "Billy",
+            last_name: "Robert",
+            address: "Miami, FL",
+            created_at: "2025-04-08 11:13:10.319366",
+          },
+        },
+        DeletedUser: {
+          type: "object",
+          properties: {
+            message: { type: "string" },
+            deletedUser: { type: "object" },
+          },
+          example: {
+            message: "Successfully deleted user.",
+            deletedUser: {
+              id: 2,
+              username: "bbob",
+              email: "billyb@gmail.com",
+              password:
+                "$2b$11$rHowWbwkyFdcl4hEGLvE3eAv5uFU9DlQ4EOywnbwG5D5kR7mHAdQW",
+              first_name: "Billy",
+              last_name: "Bob",
+              address: "Miami, FL",
+              created_at: "2025-04-08 11:13:10.319366",
+            },
+          },
+        },
         InternalServerError: {
           type: "object",
           properties: {
