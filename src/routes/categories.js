@@ -51,7 +51,7 @@ router.get("/", getAllCategories);
  *            schema:
  *              $ref: '#/components/schemas/GetProdsByCategory'
  *      400:
- *        description: Bad request. Invalid category id.
+ *        description: Bad request.
  *        content:
  *          application/json:
  *            schema:
@@ -100,7 +100,7 @@ router.get("/:categoryId/products", getProdsByCategory);
  *            schema:
  *              $ref: '#/components/schemas/NewCategory'
  *      400:
- *        description: Bad request. Missing category name.
+ *        description: Bad request.
  *        content:
  *          application/json:
  *            schema:
