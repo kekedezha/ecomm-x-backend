@@ -50,7 +50,7 @@ router.get("/", getAllProducts);
  *            schema:
  *              $ref: '#/components/schemas/Product'
  *      400:
- *        description: Bad request. Invalid product id.
+ *        description: Bad request.
  *        content:
  *          application/json:
  *            schema:
@@ -104,7 +104,7 @@ router.get("/:productId", getProductById);
  *             schema:
  *              $ref: '#/components/schemas/CreatedProduct'
  *       400:
- *         description: Missing or invalid product information.
+ *         description: Bad Request.
  *         content:
  *           application/json:
  *             schema:
@@ -176,7 +176,7 @@ router.post(
  *                category_id: 2
  *                created_at: 2025-03-27 11:12:51.008486
  *      400:
- *        description: Bad request. Invalid product update or no fields provided for update.
+ *        description: Bad request.
  *        content:
  *          application/json:
  *            schema:
@@ -263,7 +263,7 @@ router.put(
  *                  category_id: 2
  *                  created_at: 2025-03-27 11:12:51.008486
  *      400:
- *        description: Invalid product ID.
+ *        description: Bad Request.
  *        content:
  *          application/json:
  *            schema:
