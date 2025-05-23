@@ -68,7 +68,7 @@ const router = Router();
  *                example:
  *                  error: Invalid token.
  *        404:
- *          description: Order ID not found
+ *          description: Not found.
  *          content:
  *            application/json:
  *              schema:
