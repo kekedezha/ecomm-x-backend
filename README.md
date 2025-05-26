@@ -8,15 +8,22 @@ A RESTful e-commerce API built with Express.js, Node.js, and PostgreSQL. Handles
 
 ## Table of Contents
 
-- Motivation
-- Features
-- Tech Stack
-- Getting Started
-- Future Improvements
-- In Progress
-  <!--- - API Documentation) -->
-  <!-- - CI/CD -->
-  <!-- - Testing -->
+1.  Motivation
+2.  Features
+3.  Tech Stack
+4.  Getting Started
+    - Prerequisites
+    - Installation
+    - Environment Variables
+5.  Running the App
+6.  Testing
+7.  API Documentation
+8.  Continuous Integration
+9.  Future Improvements
+10. In Progress
+11. License
+    <!-- - CI/CD -->
+    <!-- - Testing -->
 
 ## Motivation
 
@@ -33,13 +40,12 @@ What started off as a general e-commerce REST API, hence the name ecomm-x-backen
 
 ## Tech Stack
 
-- Node.js
-- Express.js
-- PostgreSQL
-- JWT for auth
-- Jest & Supertest for testing
-- Swagger for API docs
-- GitHub Actions for CI
+- **Backend:** Node.js, Express.js
+- **Database:** PostgreSQL
+- **Auth:** JSON Web Tokens (JWT)
+- **Testing:** Jest, Supertest
+- **CI/CD:** GitHub Actions
+- **Docs:** Swagger / OpenAPI
 
 ## Getting Started
 
@@ -60,18 +66,50 @@ npm install
 
 Create a `.env` file with:
 
-```
+```env
 PORT=5000
 PGDATABASE=your_database
 USER=your_database_user
 SALT_ROUNDS=your_number_of_saltrounds
 JWT_SECRET=your_jwt_secret
-
 ```
 
-### Running the App
+> Uses PostgresSQL as the database.
+> Be sure to properly add environment variables for your preferred database
 
-`npm start`
+## Running the App
+
+```bash
+npm start
+```
+
+## Testing
+
+Run the test suite with:
+
+```bash
+npm test
+```
+
+> Uses **Jest** and **Supertest** to test all major routes.
+
+## API Documentation
+
+Swagger UI is available at:
+
+```
+http://localhost:5000/api-docs
+```
+
+> OpenAPI docs auto-generate from annotations in the routes.
+
+## Continuous Integration
+
+This project uses **GitHub Actions** to:
+
+- Lint the codebase
+- Run all tests
+<!-- - Verify build on every push/PR to `main` -->
 
 ## Future Improvements
 
@@ -79,7 +117,10 @@ JWT_SECRET=your_jwt_secret
 - Admin dashboard (frontend)
 - Rate limiting & security hardening
 
-## In Progress ⏳
+## In Progress
 
-- Create an OpenAPI specification for the REST API to detail API endpoints
 - Host backend server
+
+## License
+
+[MIT](LICENSE)
