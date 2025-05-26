@@ -86,7 +86,7 @@ router.get("/:productId", getProductById);
  * @swagger
  * /products/admin:
  *  post:
- *    summary: Get product for specified id
+ *    summary: Get product for specified id -- ADMIN ONLY
  *    tags: [Products]
  *    security:
  *      - bearerAuth: []
@@ -148,7 +148,7 @@ router.post(
  * @swagger
  * /products/admin/{productId}:
  *  put:
- *    summary: Update product for specified id
+ *    summary: Update product for specified id -- ADMIN ONLY
  *    tags: [Products]
  *    security:
  *      - bearerAuth: []
@@ -232,7 +232,7 @@ router.put(
  * @swagger
  * /products/admin/{productId}:
  *  delete:
- *    summary: Delete product for specified id
+ *    summary: Delete product for specified id -- ADMIN ONLY
  *    tags: [Products]
  *    security:
  *      - bearerAuth: []
