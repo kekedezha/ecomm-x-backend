@@ -116,7 +116,7 @@ export const loginUser = async (req, res) => {
 
     if (await comparePassword(inputPassword, foundUser.password)) {
       // Generate and send JWT
-      if (foundUser.id == 1) {
+      if (foundUser.username === "kekedezha") {
         foundUser.role = "admin";
       } else {
         foundUser.role = "user";
