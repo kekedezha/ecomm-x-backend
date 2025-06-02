@@ -34,7 +34,7 @@ module.exports = {
     connection: {
       host: process.env.DB_HOST || "localhost",
       port: process.env.DB_PORT || 5432,
-      database: process.env.PGDATABASE,
+      database: process.env.PG_DB_TEST,
       user: process.env.DB_USER,
     },
     pool: {
@@ -43,11 +43,11 @@ module.exports = {
     },
     migrations: {
       // migrations allow you to define sets of schema changes so upgrading a database is a breeze
-      directory: "./db/migrations", // define the directory for migration files
+      directory: "./dist/db/migrations", // define the directory for migration files
     },
     seeds: {
       // seed files allow you to populate your database with test or seed data independent of your migration files
-      directory: "./db/seeds", // define the directory for seeding files
+      directory: "./dist/db/seeds", // define the directory for seeding files
     },
   },
 };

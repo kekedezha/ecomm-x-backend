@@ -1,6 +1,6 @@
 import app from "../../../src/index";
 import supertest from "supertest";
-import pool from "../../../src/config/db";
+import pool from "../../../src/config/dbTest";
 import "dotenv/config";
 
 const requestWithSupertest = supertest(app);
