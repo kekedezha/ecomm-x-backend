@@ -1,6 +1,6 @@
 import app from "../../../src/index";
 import supertest from "supertest";
-import pool from "../../../src/config/db";
+import testPool from "../../../src/config/dbTest";
 import "dotenv/config";
 
 const requestWithSupertest = supertest(app);
@@ -11,7 +11,7 @@ beforeAll(async () => {
   userLogin = await requestWithSupertest
     .post("/users/login")
     .send({ email: "yuki@gmail.com", password: process.env.YUKI_PASSWORD });
-  userToken = userLogin.body.token;
+  userToken = await userLogin.body.token;
 });
 
 describe("Carts endpoints", () => {
@@ -102,7 +102,7 @@ describe("Carts endpoints", () => {
         .post("/carts/2")
         .set("Authorization", `Bearer ${userToken}`)
         .send({});
-      expect(res.status).toEqual(404);
+      expect(res.status).toEqual(400);
       expect(res.type).toEqual(expect.stringContaining("json"));
       expect(res.body.error).toEqual("Bad Request. No product id given.");
     });
@@ -273,5 +273,5 @@ describe("Carts endpoints", () => {
 
 // Ensure db connection pool closes after all the tests to ensure proper teardown and prevent data leaks
 afterAll(async () => {
-  await pool.end(); // close db connection
+  await testPool.end(); // close db connection
 });
