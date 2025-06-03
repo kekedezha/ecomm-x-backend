@@ -44,6 +44,8 @@ jobs:
       - name: Create .env.test
         run: |
           echo "PORT=3000" >> .env.test
+          echo "PGPORT=5432"
+          echo "PGDATABASE=ecomm_x_test" >> .env.test
           echo "PG_DB_TEST=ecomm_x_test" >> .env.test
           echo "PGUSER=christiandezha" >> .env.test
           echo "PGPASSWORD=${{secrets.POSTGRES_PASSWORD}}" >> .env.test
@@ -66,4 +68,4 @@ jobs:
         run: npx knex seed:run --env test
 
       - name: Run tests
-        run: cross-env NODE_ENV=test jest --testTimeout=5000 --runInBand --forceExit
+        run: npm run test:ci

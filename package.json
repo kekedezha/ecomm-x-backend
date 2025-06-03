@@ -5,6 +5,7 @@
   "scripts": {
     "start": "nodemon --exec babel-node src/server.js",
     "test": "(pg_isready || brew services start postgresql) && cross-env NODE_ENV=test jest --testTimeout=5000 --runInBand && brew services stop postgresql",
+    "test:ci": "cross-env NODE_ENV=test jest --testTimeout=5000 --runInBand --forceExit",
     "build": "babel src --out-dir dist",
     "knex:seed": "npm run build && knex seed:run --env test",
     "knex:migrate": "npm run build && knex migrate:latest --env test",
