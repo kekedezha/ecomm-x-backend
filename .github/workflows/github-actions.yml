@@ -66,4 +66,4 @@ jobs:
         run: npx knex seed:run --env test
 
       - name: Run tests
-        run: cross-env NODE_ENV=test jest --testTimeout=5000 --runInBand --forceExit
+        run: npm run test:ci
