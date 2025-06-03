@@ -36,6 +36,7 @@ module.exports = {
       port: process.env.PGPORT || 5432,
       database: process.env.PG_DB_TEST,
       user: process.env.PGUSER,
+      password: process.env.PGPASSWORD,
     },
     pool: {
       min: 2,

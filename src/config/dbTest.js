@@ -6,6 +6,7 @@ const testPool = new Pool({
   port: process.env.PGPORT,
   user: process.env.PGUSER,
   database: process.env.PG_DB_TEST,
+  password: process.env.PGPASSWORD,
 });
 
 export default testPool;
