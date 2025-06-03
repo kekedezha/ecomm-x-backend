@@ -12,6 +12,7 @@ jobs:
         env:
           POSTGRES_USER: christiandezha
           POSTGRES_DB: ecomm_x_test
+          POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
         ports:
           - 5432:5432
         options: >-
@@ -45,6 +46,7 @@ jobs:
           echo "PORT=3000" >> .env.test
           echo "PG_DB_TEST=ecomm_x_test" >> .env.test
           echo "PGUSER=christiandezha" >> .env.test
+          echo "PGPASSWORD=${{secrets.POSTGRES_PASSWORD}}" >> .env.test
           echo "SALT_ROUNDS=${{ secrets.SALT_ROUNDS }}" >> .env.test
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.test
           echo "ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }}" >> .env.test
