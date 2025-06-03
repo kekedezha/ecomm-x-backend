@@ -3,8 +3,8 @@ import "dotenv/config"; // Initialize .env variables from .env file
 
 const testPool = new Pool({
   host: "localhost",
-  port: process.env.PORT,
-  user: process.env.DB_USER,
+  port: process.env.PGPORT,
+  user: process.env.PGUSER,
   database: process.env.PG_DB_TEST,
 });
 

@@ -10,10 +10,10 @@ module.exports = {
   development: {
     client: "pg",
     connection: {
-      host: process.env.DB_HOST || "localhost",
-      port: process.env.DB_PORT || 5432,
+      host: "localhost",
+      port: process.env.PGPORT || 5432,
       database: process.env.PGDATABASE,
-      user: process.env.DB_USER,
+      user: process.env.PGUSER,
     },
     pool: {
       min: 2,
@@ -32,10 +32,10 @@ module.exports = {
   test: {
     client: "pg",
     connection: {
-      host: process.env.DB_HOST || "localhost",
-      port: process.env.DB_PORT || 5432,
+      host: "localhost",
+      port: process.env.PGPORT || 5432,
       database: process.env.PG_DB_TEST,
-      user: process.env.DB_USER,
+      user: process.env.PGUSER,
     },
     pool: {
       min: 2,
