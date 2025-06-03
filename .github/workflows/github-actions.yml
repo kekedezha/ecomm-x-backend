@@ -10,9 +10,9 @@ jobs:
       postgres:
         image: postgres:13
         env:
-          POSTGRES_USER: christiandezha
-          POSTGRES_DB: ecomm_x_test
-          POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+          PGUSER: christiandezha
+          PG_DB_TEST: ecomm_x_test
+          PGPASSWORD: ${{secrets.POSTGRES_PASSWORD}}
         ports:
           - 5432:5432
         options: >-
@@ -39,7 +39,7 @@ jobs:
             ${{runner.os}}
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Create .env.test
         run: |
