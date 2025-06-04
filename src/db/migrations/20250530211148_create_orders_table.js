@@ -3,18 +3,18 @@
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
-  return knex.schema.createTable("orders", (table) => {
-    table.increments("id").primary();
+  return knex.schema.createTable('orders', (table) => {
+    table.increments('id').primary();
     table
-      .integer("user_id")
+      .integer('user_id')
       .unsigned()
       .notNullable()
-      .references("id")
-      .inTable("users")
-      .onDelete("CASCADE");
-    table.decimal("total_price").notNullable();
-    table.string("status", 20).defaultTo("PENDING");
-    table.timestamp("created_at").defaultTo(knex.fn.now());
+      .references('id')
+      .inTable('users')
+      .onDelete('CASCADE');
+    table.decimal('total_price').notNullable();
+    table.string('status', 20).defaultTo('PENDING');
+    table.timestamp('created_at').defaultTo(knex.fn.now());
   });
 };
 
@@ -23,5 +23,5 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.dropTableIfExists("orders");
+  return knex.schema.dropTableIfExists('orders');
 };

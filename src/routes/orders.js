@@ -1,5 +1,5 @@
 // Import 'Router' class from the express module to create modular route handlers
-import { Router } from "express";
+import { Router } from 'express';
 import {
   getAllOrders,
   getAllUserOrders,
@@ -7,13 +7,13 @@ import {
   createOrderFromCart,
   updateOrderStatus,
   deleteUserOrder,
-} from "../controllers/orders.controller";
+} from '../controllers/orders.controller';
 import {
   authenticateToken,
   authorizeRoles,
   isSameUser,
-} from "../middleware/auth";
-import { checkIfUserExists } from "../middleware/orders.middleware";
+} from '../middleware/auth';
+import { checkIfUserExists } from '../middleware/orders.middleware';
 
 // Initialize a router instance to use with 'orders' routes
 const router = Router();
@@ -55,7 +55,7 @@ const router = Router();
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.get("/admin", authenticateToken, authorizeRoles("admin"), getAllOrders);
+router.get('/admin', authenticateToken, authorizeRoles('admin'), getAllOrders);
 
 /**
  * @swagger
@@ -97,7 +97,7 @@ router.get("/admin", authenticateToken, authorizeRoles("admin"), getAllOrders);
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.get("/:userId", authenticateToken, isSameUser, getAllUserOrders);
+router.get('/:userId', authenticateToken, isSameUser, getAllUserOrders);
 
 /**
  * @swagger
@@ -162,7 +162,7 @@ router.get("/:userId", authenticateToken, isSameUser, getAllUserOrders);
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.get("/:userId/:orderId", authenticateToken, isSameUser, getOrderForUser);
+router.get('/:userId/:orderId', authenticateToken, isSameUser, getOrderForUser);
 
 /**
  * @swagger
@@ -216,7 +216,7 @@ router.get("/:userId/:orderId", authenticateToken, isSameUser, getOrderForUser);
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.post("/:userId", authenticateToken, isSameUser, createOrderFromCart);
+router.post('/:userId', authenticateToken, isSameUser, createOrderFromCart);
 
 /**
  * @swagger
@@ -286,11 +286,11 @@ router.post("/:userId", authenticateToken, isSameUser, createOrderFromCart);
  *              $ref: '#/components/schemas/InternalServerError'
  */
 router.put(
-  "/admin/:userId/:orderId",
+  '/admin/:userId/:orderId',
   authenticateToken,
-  authorizeRoles("admin"),
+  authorizeRoles('admin'),
   checkIfUserExists,
-  updateOrderStatus
+  updateOrderStatus,
 );
 
 /**
@@ -349,10 +349,10 @@ router.put(
  *              $ref: '#/components/schemas/InternalServerError'
  */
 router.delete(
-  "/admin/:orderId",
+  '/admin/:orderId',
   authenticateToken,
-  authorizeRoles("admin"),
-  deleteUserOrder
+  authorizeRoles('admin'),
+  deleteUserOrder,
 );
 
 export default router;

@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+Object.defineProperty(exports, '__esModule', {
+  value: true,
 });
 exports.default = void 0;
-var _express = require("express");
-var _checkout = require("../controllers/checkout.controller");
-var _auth = require("../middleware/auth");
+var _express = require('express');
+var _checkout = require('../controllers/checkout.controller');
+var _auth = require('../middleware/auth');
 // Import 'Router' class from the express module to create modular route handlers
 
 // Initialize a router instance to use with 'carts' routes
@@ -89,5 +89,10 @@ const router = (0, _express.Router)();
  *                $ref: '#/components/schemas/InternalServerError'
  *
  */
-router.post("/:userId", _auth.authenticateToken, _auth.isSameUser, _checkout.finalizeOrder);
-var _default = exports.default = router;
+router.post(
+  '/:userId',
+  _auth.authenticateToken,
+  _auth.isSameUser,
+  _checkout.finalizeOrder,
+);
+var _default = (exports.default = router);

@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+Object.defineProperty(exports, '__esModule', {
+  value: true,
 });
 exports.default = void 0;
-var _express = require("express");
-var _users = require("../controllers/users.controller");
-var _auth = require("../middleware/auth");
+var _express = require('express');
+var _users = require('../controllers/users.controller');
+var _auth = require('../middleware/auth');
 // Import 'Router' class from the express module to create modular route handlers
 
 // Initialize a router instance to use with 'users' routes
@@ -50,7 +50,12 @@ const router = (0, _express.Router)();
  *               $ref: '#/components/schemas/InternalServerError'
  *
  */
-router.get("/admin", _auth.authenticateToken, (0, _auth.authorizeRoles)("admin"), _users.getAllUsers);
+router.get(
+  '/admin',
+  _auth.authenticateToken,
+  (0, _auth.authorizeRoles)('admin'),
+  _users.getAllUsers,
+);
 
 /**
  * @swagger
@@ -104,7 +109,12 @@ router.get("/admin", _auth.authenticateToken, (0, _auth.authorizeRoles)("admin")
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.get("/:userId", _auth.authenticateToken, _auth.isSameUser, _users.getUserById);
+router.get(
+  '/:userId',
+  _auth.authenticateToken,
+  _auth.isSameUser,
+  _users.getUserById,
+);
 
 /**
  * @swagger
@@ -148,7 +158,7 @@ router.get("/:userId", _auth.authenticateToken, _auth.isSameUser, _users.getUser
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.post("/register", _users.registerNewUser);
+router.post('/register', _users.registerNewUser);
 
 /**
  * @swagger
@@ -195,7 +205,7 @@ router.post("/register", _users.registerNewUser);
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.post("/login", _users.loginUser);
+router.post('/login', _users.loginUser);
 
 /**
  * @swagger
@@ -262,7 +272,12 @@ router.post("/login", _users.loginUser);
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.put("/:userId", _auth.authenticateToken, _auth.isSameUser, _users.updateUser);
+router.put(
+  '/:userId',
+  _auth.authenticateToken,
+  _auth.isSameUser,
+  _users.updateUser,
+);
 
 /**
  * @swagger
@@ -320,5 +335,10 @@ router.put("/:userId", _auth.authenticateToken, _auth.isSameUser, _users.updateU
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.delete("/:userId", _auth.authenticateToken, _auth.isSameUser, _users.deleteUser);
-var _default = exports.default = router;
+router.delete(
+  '/:userId',
+  _auth.authenticateToken,
+  _auth.isSameUser,
+  _users.deleteUser,
+);
+var _default = (exports.default = router);

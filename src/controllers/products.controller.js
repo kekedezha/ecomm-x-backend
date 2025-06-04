@@ -1,15 +1,15 @@
-import pool from "../config/db";
+import pool from '../config/db';
 
 // GET all products
 export const getAllProducts = async (req, res) => {
   try {
     const result = await pool.query(
-      "SELECT id, name, description, price, stock, category_id FROM products"
+      'SELECT id, name, description, price, stock, category_id FROM products',
     );
     res.json(result.rows);
   } catch (error) {
-    console.error("Error fetching products: ", error);
-    res.status(500).json({ error: "Internal Server Error." });
+    console.error('Error fetching products: ', error);
+    res.status(500).json({ error: 'Internal Server Error.' });
   }
 };
 
@@ -19,18 +19,18 @@ export const getProductById = async (req, res) => {
     if (isNaN(productId)) {
       return res
         .status(400)
-        .json({ error: "Bad Request. Invalid product id." });
+        .json({ error: 'Bad Request. Invalid product id.' });
     }
-    const result = await pool.query("SELECT * FROM products WHERE id = $1", [
+    const result = await pool.query('SELECT * FROM products WHERE id = $1', [
       productId,
     ]);
     if (result.rows.length == 0) {
-      return res.status(404).json({ error: "Product not found." });
+      return res.status(404).json({ error: 'Product not found.' });
     }
     res.json(result.rows[0]);
   } catch (error) {
-    console.error("Error fetching specified product: ", error);
-    res.status(500).json({ error: "Internal Server Error." });
+    console.error('Error fetching specified product: ', error);
+    res.status(500).json({ error: 'Internal Server Error.' });
   }
 };
 
@@ -51,20 +51,20 @@ export const addNewProduct = async (req, res) => {
       Number.isNaN(categoryId)
     ) {
       return res.status(400).json({
-        error: "Bad Request. Missing or invalid product information.",
+        error: 'Bad Request. Missing or invalid product information.',
       });
     }
     const result = await pool.query(
-      "INSERT INTO products (name, description, price, stock, category_id) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-      [name, description, price, stock, categoryId]
+      'INSERT INTO products (name, description, price, stock, category_id) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [name, description, price, stock, categoryId],
     );
     res.status(201).json({
-      message: "Successfully created new product!",
+      message: 'Successfully created new product!',
       product: result.rows[0],
     });
   } catch (error) {
-    console.error("Error creating product: ", error);
-    res.status(500).send({ error: "Internal Server Error." });
+    console.error('Error creating product: ', error);
+    res.status(500).send({ error: 'Internal Server Error.' });
   }
 };
 
@@ -73,18 +73,18 @@ export const updateProduct = async (req, res) => {
   try {
     const productId = parseInt(req.params.productId);
     if (Number.isNaN(productId)) {
-      return res.status(400).json({ error: "Invalid product ID." });
+      return res.status(400).json({ error: 'Invalid product ID.' });
     }
 
     const updates = req.body;
     // Ensure there's at least one field to update
     if (Object.keys(updates).length == 0) {
-      return res.status(400).json({ error: "No fields provided for update." });
+      return res.status(400).json({ error: 'No fields provided for update.' });
     }
 
     // Create dynamic query
     const setClause = Object.keys(updates).map(
-      (key, index) => `"${key}" = $${index + 1}`
+      (key, index) => `"${key}" = $${index + 1}`,
     );
     const values = Object.values(updates);
     values.push(productId);
@@ -94,13 +94,13 @@ export const updateProduct = async (req, res) => {
     const { rows } = await pool.query(query, values);
 
     if (rows.length == 0) {
-      return res.status(404).json({ error: "Product not found." });
+      return res.status(404).json({ error: 'Product not found.' });
     }
 
     res.status(200).json(rows[0]);
   } catch (error) {
-    console.error("Error updating specified product: ", error);
-    res.status(500).send({ error: "Internal Server Error." });
+    console.error('Error updating specified product: ', error);
+    res.status(500).send({ error: 'Internal Server Error.' });
   }
 };
 
@@ -109,21 +109,21 @@ export const deleteProduct = async (req, res) => {
   try {
     const productId = parseInt(req.params.productId);
     if (Number.isNaN(productId)) {
-      return res.status(400).json({ error: "Invalid product ID." });
+      return res.status(400).json({ error: 'Invalid product ID.' });
     }
     const result = await pool.query(
-      "DELETE FROM products WHERE id = $1 RETURNING *",
-      [productId]
+      'DELETE FROM products WHERE id = $1 RETURNING *',
+      [productId],
     );
     if (result.rowCount == 0) {
-      return res.status(404).json({ error: "Product not found." });
+      return res.status(404).json({ error: 'Product not found.' });
     }
     return res.status(200).json({
-      message: "Successfully deleted product.",
+      message: 'Successfully deleted product.',
       deletedProduct: result.rows[0],
     });
   } catch (error) {
-    console.error("Error deleting specified product: ", error);
-    res.status(500).send({ error: "Internal Server Error." });
+    console.error('Error deleting specified product: ', error);
+    res.status(500).send({ error: 'Internal Server Error.' });
   }
 };

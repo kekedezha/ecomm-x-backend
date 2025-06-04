@@ -1,13 +1,13 @@
 // Import 'Router' class from the express module to create modular route handlers
-import { Router } from "express";
+import { Router } from 'express';
 import {
   getAllProducts,
   getProductById,
   addNewProduct,
   updateProduct,
   deleteProduct,
-} from "../controllers/products.controller";
-import { authenticateToken, authorizeRoles } from "../middleware/auth";
+} from '../controllers/products.controller';
+import { authenticateToken, authorizeRoles } from '../middleware/auth';
 
 // Initialize a router instance to use with 'products' routes
 const router = Router();
@@ -32,7 +32,7 @@ const router = Router();
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.get("/", getAllProducts);
+router.get('/', getAllProducts);
 
 /**
  * @swagger
@@ -80,7 +80,7 @@ router.get("/", getAllProducts);
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.get("/:productId", getProductById);
+router.get('/:productId', getProductById);
 
 /**
  * @swagger
@@ -138,10 +138,10 @@ router.get("/:productId", getProductById);
  *               $ref: '#/components/schemas/InternalServerError'
  */
 router.post(
-  "/admin",
+  '/admin',
   authenticateToken,
-  authorizeRoles("admin"),
-  addNewProduct
+  authorizeRoles('admin'),
+  addNewProduct,
 );
 
 /**
@@ -222,10 +222,10 @@ router.post(
  *              $ref: '#/components/schemas/InternalServerError'
  */
 router.put(
-  "/admin/:productId",
+  '/admin/:productId',
   authenticateToken,
-  authorizeRoles("admin"),
-  updateProduct
+  authorizeRoles('admin'),
+  updateProduct,
 );
 
 /**
@@ -309,10 +309,10 @@ router.put(
  *              $ref: '#/components/schemas/InternalServerError'
  */
 router.delete(
-  "/admin/:productId",
+  '/admin/:productId',
   authenticateToken,
-  authorizeRoles("admin"),
-  deleteProduct
+  authorizeRoles('admin'),
+  deleteProduct,
 );
 
 export default router;

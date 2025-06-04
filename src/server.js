@@ -1,9 +1,9 @@
-import app from "./index.js"; // Import Express app
-import "dotenv/config"; // Initialize .env variables from .env file
+import app from './index.js'; // Import Express app
+import 'dotenv/config'; // Initialize .env variables from .env file
 
 const server = app.listen(process.env.PORT, () => {
   console.log(
-    `Listening on port ${process.env.PORT}! Initial set up for backend server.`
+    `Listening on port ${process.env.PORT}! Initial set up for backend server.`,
   );
 });
 

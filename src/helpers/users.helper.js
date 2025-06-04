@@ -1,8 +1,8 @@
 // Import bcrypt object for hashing assistance
-import bcrypt from "bcrypt";
-import "dotenv/config";
-import jwt from "jsonwebtoken";
-import pool from "../config/db";
+import bcrypt from 'bcrypt';
+import 'dotenv/config';
+import jwt from 'jsonwebtoken';
+import pool from '../config/db';
 
 // function used to hash a new user's password to be stored in the db
 export const hashPassword = async (unhashedPassword) => {
@@ -19,7 +19,7 @@ export const comparePassword = async (passwordInput, hashedPassword) => {
 // function to generate JWT with 30 min expiration
 export const generateJWT = (payload) => {
   const secret = process.env.JWT_SECRET;
-  const options = { expiresIn: "30m" };
+  const options = { expiresIn: '30m' };
   return jwt.sign(payload, secret, options);
 };
 
@@ -27,8 +27,8 @@ export const generateJWT = (payload) => {
 export const createUserCart = async (userId) => {
   try {
     const cartResult = await pool.query(
-      "INSERT INTO carts (user_id) VALUES ($1) RETURNING id",
-      [userId]
+      'INSERT INTO carts (user_id) VALUES ($1) RETURNING id',
+      [userId],
     );
     return cartResult.rows[0].id;
   } catch (error) {
@@ -41,15 +41,15 @@ export const createUserCart = async (userId) => {
 export const checkIfCartExists = async (userId) => {
   try {
     const doesCartExist = await pool.query(
-      "SELECT * from carts WHERE user_id = $1",
-      [userId]
+      'SELECT * from carts WHERE user_id = $1',
+      [userId],
     );
     if (doesCartExist.rows.length == 0) {
       return null;
     }
     return doesCartExist.rows[0].id;
   } catch (error) {
-    console.log("Error fetching user cart: ", error);
+    console.log('Error fetching user cart: ', error);
     throw error;
   }
 };

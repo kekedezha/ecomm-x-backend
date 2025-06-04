@@ -1,13 +1,13 @@
-import jwt from "jsonwebtoken";
-import "dotenv/config";
+import jwt from 'jsonwebtoken';
+import 'dotenv/config';
 
 export const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader?.split(" ")[1]; // Split string 'Bearer <token>'
-  if (!token) return res.status(401).json({ error: "Missing token." });
+  const authHeader = req.headers['authorization'];
+  const token = authHeader?.split(' ')[1]; // Split string 'Bearer <token>'
+  if (!token) return res.status(401).json({ error: 'Missing token.' });
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) return res.status(403).json({ error: "Invalid token." });
+    if (err) return res.status(403).json({ error: 'Invalid token.' });
     req.user = user; // Attach user info to request
     next(); // Proceed to route handler
   });
@@ -16,7 +16,7 @@ export const authenticateToken = (req, res, next) => {
 export const authorizeRoles = (...allowedRoles) => {
   return (req, res, next) => {
     if (!req.user || !allowedRoles.includes(req.user.role)) {
-      return res.status(403).json({ error: "Access denied." });
+      return res.status(403).json({ error: 'Access denied.' });
     }
     next();
   };

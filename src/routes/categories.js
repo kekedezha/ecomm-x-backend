@@ -1,13 +1,13 @@
 // Import 'Router' class from the express module to create modular route handlers
-import { Router } from "express";
+import { Router } from 'express';
 import {
   getAllCategories,
   getProdsByCategory,
   createNewCategory,
   updateCategory,
   deleteCategory,
-} from "../controllers/categories.controller";
-import { authenticateToken, authorizeRoles } from "../middleware/auth";
+} from '../controllers/categories.controller';
+import { authenticateToken, authorizeRoles } from '../middleware/auth';
 
 // Initialize a router instance to use with 'categories' routes
 const router = Router();
@@ -33,7 +33,7 @@ const router = Router();
  *              $ref: '#/components/schemas/InternalServerError'
  *
  */
-router.get("/", getAllCategories);
+router.get('/', getAllCategories);
 
 /**
  * @swagger
@@ -82,7 +82,7 @@ router.get("/", getAllCategories);
  *              $ref: '#/components/schemas/InternalServerError'
  *
  */
-router.get("/:categoryId/products", getProdsByCategory);
+router.get('/:categoryId/products', getProdsByCategory);
 
 /**
  * @swagger
@@ -135,10 +135,10 @@ router.get("/:categoryId/products", getProdsByCategory);
  *
  */
 router.post(
-  "/admin",
+  '/admin',
   authenticateToken,
-  authorizeRoles("admin"),
-  createNewCategory
+  authorizeRoles('admin'),
+  createNewCategory,
 );
 
 /**
@@ -205,10 +205,10 @@ router.post(
  *              $ref: '#/components/schemas/InternalServerError'
  */
 router.put(
-  "/admin/:categoryId",
+  '/admin/:categoryId',
   authenticateToken,
-  authorizeRoles("admin"),
-  updateCategory
+  authorizeRoles('admin'),
+  updateCategory,
 );
 
 /**
@@ -270,10 +270,10 @@ router.put(
  *
  */
 router.delete(
-  "/admin/:categoryId",
+  '/admin/:categoryId',
   authenticateToken,
-  authorizeRoles("admin"),
-  deleteCategory
+  authorizeRoles('admin'),
+  deleteCategory,
 );
 
 export default router;
