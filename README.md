@@ -22,8 +22,6 @@ A RESTful e-commerce API built with Express.js, Node.js, and PostgreSQL. Handles
 9.  Future Improvements
 10. In Progress
 11. License
-    <!-- - CI/CD -->
-    <!-- - Testing -->
 
 ## Motivation
 
@@ -41,7 +39,7 @@ What started off as a general e-commerce REST API, hence the name ecomm-x-backen
 ## Tech Stack
 
 - **Backend:** Node.js, Express.js
-- **Database:** PostgreSQL
+- **Database:** PostgreSQL, postgres-node, Knex (migration & seeding)
 - **Auth:** JSON Web Tokens (JWT)
 - **Testing:** Jest, Supertest
 - **CI/CD:** GitHub Actions
@@ -109,7 +107,7 @@ This project uses **GitHub Actions** to:
 
 - Lint the codebase
 - Run all tests
-<!-- - Verify build on every push/PR to `main` -->
+- Verify build on every push/PR
 
 ## Future Improvements
 
