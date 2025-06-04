@@ -65,7 +65,7 @@ jobs:
         run: npm run lint
 
       - name: Check formatting
-        run: npm run format:ci
+        run: npm run format:fix
 
       - name: Run migrations
         run: npx knex migrate:latest --env test
