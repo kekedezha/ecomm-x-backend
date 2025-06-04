@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+Object.defineProperty(exports, '__esModule', {
+  value: true,
 });
 exports.default = void 0;
-var _express = require("express");
-var _products = require("../controllers/products.controller");
-var _auth = require("../middleware/auth");
+var _express = require('express');
+var _products = require('../controllers/products.controller');
+var _auth = require('../middleware/auth');
 // Import 'Router' class from the express module to create modular route handlers
 
 // Initialize a router instance to use with 'products' routes
@@ -32,7 +32,7 @@ const router = (0, _express.Router)();
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.get("/", _products.getAllProducts);
+router.get('/', _products.getAllProducts);
 
 /**
  * @swagger
@@ -80,7 +80,7 @@ router.get("/", _products.getAllProducts);
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.get("/:productId", _products.getProductById);
+router.get('/:productId', _products.getProductById);
 
 /**
  * @swagger
@@ -137,7 +137,12 @@ router.get("/:productId", _products.getProductById);
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.post("/admin", _auth.authenticateToken, (0, _auth.authorizeRoles)("admin"), _products.addNewProduct);
+router.post(
+  '/admin',
+  _auth.authenticateToken,
+  (0, _auth.authorizeRoles)('admin'),
+  _products.addNewProduct,
+);
 
 /**
  * @swagger
@@ -216,7 +221,12 @@ router.post("/admin", _auth.authenticateToken, (0, _auth.authorizeRoles)("admin"
  *            schema:
  *              $ref: '#/components/schemas/InternalServerError'
  */
-router.put("/admin/:productId", _auth.authenticateToken, (0, _auth.authorizeRoles)("admin"), _products.updateProduct);
+router.put(
+  '/admin/:productId',
+  _auth.authenticateToken,
+  (0, _auth.authorizeRoles)('admin'),
+  _products.updateProduct,
+);
 
 /**
  * @swagger
@@ -298,5 +308,10 @@ router.put("/admin/:productId", _auth.authenticateToken, (0, _auth.authorizeRole
  *            schema:
  *              $ref: '#/components/schemas/InternalServerError'
  */
-router.delete("/admin/:productId", _auth.authenticateToken, (0, _auth.authorizeRoles)("admin"), _products.deleteProduct);
-var _default = exports.default = router;
+router.delete(
+  '/admin/:productId',
+  _auth.authenticateToken,
+  (0, _auth.authorizeRoles)('admin'),
+  _products.deleteProduct,
+);
+var _default = (exports.default = router);

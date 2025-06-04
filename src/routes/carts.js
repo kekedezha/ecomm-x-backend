@@ -1,14 +1,14 @@
 // Import 'Router' class from the express module to create modular route handlers
-import { Router } from "express";
+import { Router } from 'express';
 import {
   getUsersCurrentCart,
   addProductToCart,
   updateProductQty,
   deleteProdFromCart,
   clearCart,
-} from "../controllers/carts.controller";
-import { authenticateToken, isSameUser } from "../middleware/auth";
-import { isValidProduct } from "../middleware/cart.middleware";
+} from '../controllers/carts.controller';
+import { authenticateToken, isSameUser } from '../middleware/auth';
+import { isValidProduct } from '../middleware/cart.middleware';
 
 // Initialize a router instance to use with 'carts' routes
 const router = Router();
@@ -53,7 +53,7 @@ const router = Router();
  *            schema:
  *              $ref: '#/components/schemas/InternalServerError'
  */
-router.get("/:userId", authenticateToken, isSameUser, getUsersCurrentCart);
+router.get('/:userId', authenticateToken, isSameUser, getUsersCurrentCart);
 
 /**
  * @swagger
@@ -119,11 +119,11 @@ router.get("/:userId", authenticateToken, isSameUser, getUsersCurrentCart);
  *              $ref: '#/components/schemas/InternalServerError'
  */
 router.post(
-  "/:userId",
+  '/:userId',
   authenticateToken,
   isSameUser,
   isValidProduct,
-  addProductToCart
+  addProductToCart,
 );
 
 /**
@@ -193,10 +193,10 @@ router.post(
  *              $ref: '#/components/schemas/InternalServerError'
  */
 router.put(
-  "/:userId/:productId",
+  '/:userId/:productId',
   authenticateToken,
   isSameUser,
-  updateProductQty
+  updateProductQty,
 );
 
 /**
@@ -257,10 +257,10 @@ router.put(
  *              $ref: '#/components/schemas/InternalServerError'
  */
 router.delete(
-  "/:userId/:productId",
+  '/:userId/:productId',
   authenticateToken,
   isSameUser,
-  deleteProdFromCart
+  deleteProdFromCart,
 );
 
 /**
@@ -311,6 +311,6 @@ router.delete(
  *            schema:
  *              $ref: '#/components/schemas/InternalServerError'
  */
-router.delete("/:userId", authenticateToken, isSameUser, clearCart);
+router.delete('/:userId', authenticateToken, isSameUser, clearCart);
 
 export default router;

@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+Object.defineProperty(exports, '__esModule', {
+  value: true,
 });
 exports.default = void 0;
-var _express = require("express");
-var _categories = require("../controllers/categories.controller");
-var _auth = require("../middleware/auth");
+var _express = require('express');
+var _categories = require('../controllers/categories.controller');
+var _auth = require('../middleware/auth');
 // Import 'Router' class from the express module to create modular route handlers
 
 // Initialize a router instance to use with 'categories' routes
@@ -33,7 +33,7 @@ const router = (0, _express.Router)();
  *              $ref: '#/components/schemas/InternalServerError'
  *
  */
-router.get("/", _categories.getAllCategories);
+router.get('/', _categories.getAllCategories);
 
 /**
  * @swagger
@@ -82,7 +82,7 @@ router.get("/", _categories.getAllCategories);
  *              $ref: '#/components/schemas/InternalServerError'
  *
  */
-router.get("/:categoryId/products", _categories.getProdsByCategory);
+router.get('/:categoryId/products', _categories.getProdsByCategory);
 
 /**
  * @swagger
@@ -134,7 +134,12 @@ router.get("/:categoryId/products", _categories.getProdsByCategory);
  *              $ref: '#/components/schemas/InternalServerError'
  *
  */
-router.post("/admin", _auth.authenticateToken, (0, _auth.authorizeRoles)("admin"), _categories.createNewCategory);
+router.post(
+  '/admin',
+  _auth.authenticateToken,
+  (0, _auth.authorizeRoles)('admin'),
+  _categories.createNewCategory,
+);
 
 /**
  * @swagger
@@ -199,7 +204,12 @@ router.post("/admin", _auth.authenticateToken, (0, _auth.authorizeRoles)("admin"
  *            schema:
  *              $ref: '#/components/schemas/InternalServerError'
  */
-router.put("/admin/:categoryId", _auth.authenticateToken, (0, _auth.authorizeRoles)("admin"), _categories.updateCategory);
+router.put(
+  '/admin/:categoryId',
+  _auth.authenticateToken,
+  (0, _auth.authorizeRoles)('admin'),
+  _categories.updateCategory,
+);
 
 /**
  * @swagger
@@ -259,5 +269,10 @@ router.put("/admin/:categoryId", _auth.authenticateToken, (0, _auth.authorizeRol
  *              $ref: '#/components/schemas/InternalServerError'
  *
  */
-router.delete("/admin/:categoryId", _auth.authenticateToken, (0, _auth.authorizeRoles)("admin"), _categories.deleteCategory);
-var _default = exports.default = router;
+router.delete(
+  '/admin/:categoryId',
+  _auth.authenticateToken,
+  (0, _auth.authorizeRoles)('admin'),
+  _categories.deleteCategory,
+);
+var _default = (exports.default = router);

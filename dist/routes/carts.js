@@ -1,13 +1,13 @@
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+Object.defineProperty(exports, '__esModule', {
+  value: true,
 });
 exports.default = void 0;
-var _express = require("express");
-var _carts = require("../controllers/carts.controller");
-var _auth = require("../middleware/auth");
-var _cart = require("../middleware/cart.middleware");
+var _express = require('express');
+var _carts = require('../controllers/carts.controller');
+var _auth = require('../middleware/auth');
+var _cart = require('../middleware/cart.middleware');
 // Import 'Router' class from the express module to create modular route handlers
 
 // Initialize a router instance to use with 'carts' routes
@@ -53,7 +53,12 @@ const router = (0, _express.Router)();
  *            schema:
  *              $ref: '#/components/schemas/InternalServerError'
  */
-router.get("/:userId", _auth.authenticateToken, _auth.isSameUser, _carts.getUsersCurrentCart);
+router.get(
+  '/:userId',
+  _auth.authenticateToken,
+  _auth.isSameUser,
+  _carts.getUsersCurrentCart,
+);
 
 /**
  * @swagger
@@ -118,7 +123,13 @@ router.get("/:userId", _auth.authenticateToken, _auth.isSameUser, _carts.getUser
  *            schema:
  *              $ref: '#/components/schemas/InternalServerError'
  */
-router.post("/:userId", _auth.authenticateToken, _auth.isSameUser, _cart.isValidProduct, _carts.addProductToCart);
+router.post(
+  '/:userId',
+  _auth.authenticateToken,
+  _auth.isSameUser,
+  _cart.isValidProduct,
+  _carts.addProductToCart,
+);
 
 /**
  * @swagger
@@ -186,7 +197,12 @@ router.post("/:userId", _auth.authenticateToken, _auth.isSameUser, _cart.isValid
  *            schema:
  *              $ref: '#/components/schemas/InternalServerError'
  */
-router.put("/:userId/:productId", _auth.authenticateToken, _auth.isSameUser, _carts.updateProductQty);
+router.put(
+  '/:userId/:productId',
+  _auth.authenticateToken,
+  _auth.isSameUser,
+  _carts.updateProductQty,
+);
 
 /**
  * @swagger
@@ -245,7 +261,12 @@ router.put("/:userId/:productId", _auth.authenticateToken, _auth.isSameUser, _ca
  *            schema:
  *              $ref: '#/components/schemas/InternalServerError'
  */
-router.delete("/:userId/:productId", _auth.authenticateToken, _auth.isSameUser, _carts.deleteProdFromCart);
+router.delete(
+  '/:userId/:productId',
+  _auth.authenticateToken,
+  _auth.isSameUser,
+  _carts.deleteProdFromCart,
+);
 
 /**
  * @swagger
@@ -295,5 +316,10 @@ router.delete("/:userId/:productId", _auth.authenticateToken, _auth.isSameUser, 
  *            schema:
  *              $ref: '#/components/schemas/InternalServerError'
  */
-router.delete("/:userId", _auth.authenticateToken, _auth.isSameUser, _carts.clearCart);
-var _default = exports.default = router;
+router.delete(
+  '/:userId',
+  _auth.authenticateToken,
+  _auth.isSameUser,
+  _carts.clearCart,
+);
+var _default = (exports.default = router);

@@ -67,5 +67,11 @@ jobs:
       - name: Run seeds
         run: npx knex seed:run --env test
 
+      - name: Lint code
+        run: npm run lint
+
+      - name: Check formatting
+        run: npm run format
+
       - name: Run tests
         run: npm run test:ci

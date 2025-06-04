@@ -1,5 +1,5 @@
 // Import 'Router' class from the express module to create modular route handlers
-import { Router } from "express";
+import { Router } from 'express';
 import {
   getAllUsers,
   getUserById,
@@ -7,12 +7,12 @@ import {
   loginUser,
   updateUser,
   deleteUser,
-} from "../controllers/users.controller";
+} from '../controllers/users.controller';
 import {
   authenticateToken,
   authorizeRoles,
   isSameUser,
-} from "../middleware/auth";
+} from '../middleware/auth';
 
 // Initialize a router instance to use with 'users' routes
 const router = Router();
@@ -55,7 +55,7 @@ const router = Router();
  *               $ref: '#/components/schemas/InternalServerError'
  *
  */
-router.get("/admin", authenticateToken, authorizeRoles("admin"), getAllUsers);
+router.get('/admin', authenticateToken, authorizeRoles('admin'), getAllUsers);
 
 /**
  * @swagger
@@ -109,7 +109,7 @@ router.get("/admin", authenticateToken, authorizeRoles("admin"), getAllUsers);
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.get("/:userId", authenticateToken, isSameUser, getUserById);
+router.get('/:userId', authenticateToken, isSameUser, getUserById);
 
 /**
  * @swagger
@@ -153,7 +153,7 @@ router.get("/:userId", authenticateToken, isSameUser, getUserById);
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.post("/register", registerNewUser);
+router.post('/register', registerNewUser);
 
 /**
  * @swagger
@@ -200,7 +200,7 @@ router.post("/register", registerNewUser);
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.post("/login", loginUser);
+router.post('/login', loginUser);
 
 /**
  * @swagger
@@ -267,7 +267,7 @@ router.post("/login", loginUser);
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.put("/:userId", authenticateToken, isSameUser, updateUser);
+router.put('/:userId', authenticateToken, isSameUser, updateUser);
 
 /**
  * @swagger
@@ -325,6 +325,6 @@ router.put("/:userId", authenticateToken, isSameUser, updateUser);
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.delete("/:userId", authenticateToken, isSameUser, deleteUser);
+router.delete('/:userId', authenticateToken, isSameUser, deleteUser);
 
 export default router;

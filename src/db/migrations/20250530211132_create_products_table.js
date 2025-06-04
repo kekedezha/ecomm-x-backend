@@ -3,18 +3,18 @@
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
-  return knex.schema.createTable("products", (table) => {
-    table.increments("id").primary();
-    table.string("name", 100).notNullable();
-    table.text("description");
-    table.decimal("price").notNullable();
-    table.integer("stock").notNullable();
+  return knex.schema.createTable('products', (table) => {
+    table.increments('id').primary();
+    table.string('name', 100).notNullable();
+    table.text('description');
+    table.decimal('price').notNullable();
+    table.integer('stock').notNullable();
     table
-      .integer("category_id")
+      .integer('category_id')
       .unsigned()
-      .references("id")
-      .inTable("categories");
-    table.timestamp("created_at").defaultTo(knex.fn.now());
+      .references('id')
+      .inTable('categories');
+    table.timestamp('created_at').defaultTo(knex.fn.now());
   });
 };
 
@@ -23,5 +23,5 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.dropTableIfExists("products");
+  return knex.schema.dropTableIfExists('products');
 };
