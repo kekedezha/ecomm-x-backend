@@ -13,7 +13,7 @@
     "lint": "eslint . && echo '✅ ESLint passes with no errors!'",
     "lint:fix": "eslint . --fix",
     "format": "prettier . --check",
-    "format:fix": "prettier . --write"
+    "format:fix": "prettier . 'src/**/*.js' 'tests/**/*.js' --write"
   },
   "keywords": [],
   "author": "Christian Dezha <dezhac6@gmail.com> (https://christiandezha.com/)",
